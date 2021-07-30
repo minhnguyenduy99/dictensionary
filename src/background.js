@@ -4,6 +4,7 @@ import {
   getWordDefinitionHandler,
   createWordContextHandler,
   getListSavedWordsHandler,
+  deleteWordContextHandler,
 } from "./message-handlers";
 import { syncAppStorage, initStorage, settingStorage } from "./storage";
 
@@ -31,12 +32,17 @@ function onMessageReceived(request, sender, sendResponse) {
         repository: DictionaryRepository,
       });
       break;
+    case MESSAGE_TYPES.DELETE_CONTEXT:
+      deleteWordContextHandler(request, sender, sendResponse, {
+        repository: DictionaryRepository,
+      });
+      break;
   }
 
   return true;
 }
 
-function onTabUpdated(tabId, changeInfo, tab) {
+function onTabUpdated(tabId, changeInfo) {
   const { status } = changeInfo;
   if (status === "complete") {
     DictionaryRepository.getListSavedWords().then((words) => {
@@ -71,7 +77,7 @@ function onInstalled(details) {
           app_key: data.api_key,
           created_date: data.created_date,
         })
-        .then((success) => {
+        .then(() => {
           // config key for reqpository
           configApiKey({ appKey: data.api_key, appId });
           console.log("Dictensionary is installed");

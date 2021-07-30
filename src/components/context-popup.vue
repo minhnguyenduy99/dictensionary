@@ -14,10 +14,38 @@
       <div class="dict__definitions">
         <ul>
           <li v-for="definition in contextualDefinition" :key="definition.id">
-            <word-context :definition="definition" />
+            <word-context
+              :definition="definition"
+              @delete="$_deleteContext(definition.definition_index)"
+            />
           </li>
         </ul>
       </div>
+      <section id="definition-area">
+        <div style="display: flex; justify-content: center">
+          <button
+            class="ext-btn ext-primary-dark"
+            @click="openDefinition = !openDefinition"
+            @mouseup.stop
+          >
+            {{ loadDefinitionButtonText }}
+          </button>
+        </div>
+        <transition
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
+        >
+          <div v-show="openDefinition" class="definition-list">
+            <word-definition
+              v-for="(definition, index) in definitions"
+              :key="definition.id"
+              :definition="definition"
+              :context.sync="contexts[index]"
+              @contextChanged="$_updateWordContext(index, $event)"
+            />
+          </div>
+        </transition>
+      </section>
     </div>
     <button
       class="ext-btn ext-icon ext-small ext-danger popup__close-btn"
@@ -30,10 +58,16 @@
 </template>
 
 <script>
+import { positionPopup, highlightSavedWords } from "./utils";
+import { MESSAGE_TYPES } from "../message-handlers";
+import WordDefinition from "./word-definition.vue";
+import WordContext from "./word-context";
+
 export default {
   name: "ContextPopup",
   components: {
-    "word-context": () => import("./word-context.vue"),
+    WordContext,
+    WordDefinition,
   },
   data: () => ({
     word: {
@@ -45,23 +79,119 @@ export default {
         items: [],
       },
     },
+    contexts: [],
+    isClosed: true,
+    openDefinition: false,
   }),
   computed: {
     contextualDefinition() {
       if (!this.word) {
         return [];
       }
-      const { contexts } = this.word;
-      return contexts.items
-        .filter((context) => !!context)
-        .map((context, index) => ({
-          ...context,
-          definition: this.definitions[index],
-        }));
+      return this.word?.definitions
+        ?.map((def, index) => {
+          def.context = this.contexts[index];
+          def.definition_index = index;
+          return def;
+        })
+        .filter((def) => !!def.context);
     },
     definitions() {
       return this.word?.definitions;
     },
+    loadDefinitionButtonText() {
+      return this.openDefinition ? "Close definitions" : "See definitions";
+    },
+    loadDefinitionButtonIcon() {
+      return this.openDefinition ? "expand_less" : "expand_more";
+    },
+  },
+  methods: {
+    $open(searchWord, position) {
+      const message = {
+        type: MESSAGE_TYPES.GET_WORD_DEFINITION,
+        data: { word: searchWord },
+      };
+      chrome.runtime.sendMessage(message, (response) => {
+        const { data } = response;
+        if (!data) {
+          this.word = null;
+          this.$_positionPopup();
+          this.isClosed = false;
+          return;
+        }
+        const { contexts, ...word } = data;
+        this.word = word;
+        this.contexts =
+          contexts?.items ?? new Array(word.definitions.length).fill(false);
+        this.isClosed = false;
+        this.$_positionPopup(position);
+      });
+    },
+    $_updateWordContext(index, context) {
+      this.isLoading = true;
+      const message = {
+        type: MESSAGE_TYPES.CREATE_WORD_CONTEXT,
+        data: {
+          word: this.word.word,
+          definition_index: index,
+          ...context,
+        },
+      };
+      chrome.runtime.sendMessage(message, (response) => {
+        this.isLoading = false;
+        console.log("UPdate context");
+        highlightSavedWords([this.word.word]);
+      });
+    },
+    $_deleteContext(index) {
+      const message = {
+        type: MESSAGE_TYPES.DELETE_CONTEXT,
+        data: {
+          word: this.word.word,
+          definition_index: index,
+        },
+      };
+      chrome.runtime.sendMessage(message, (response) => {
+        console.log(response);
+        const { data } = response;
+        if (!data.success) {
+          return;
+        }
+        this.$set(this.contexts, index, null);
+        // the context is deleted
+        if (data.deleted) {
+          this.isClosed = true;
+        }
+      });
+    },
+    $_positionPopup(wordPosition) {
+      if (!this.word) {
+        return;
+      }
+      positionPopup(wordPosition, this.$el);
+    },
   },
 };
 </script>
+
+<style scoped lang="scss">
+#context-popup {
+  min-width: 200px;
+  max-width: 500px;
+}
+
+#definition-area {
+  margin-top: 20px;
+
+  button:first-of-type {
+    margin-bottom: 10px;
+  }
+}
+
+.definition-list {
+  > :not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+</style>

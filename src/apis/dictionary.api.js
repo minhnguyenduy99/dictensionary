@@ -27,18 +27,18 @@ export const addDefinitionContext = (word, options) => {
     });
 };
 
-export const removeDefinitionContext = (word, options = {}) => {
+export const deleteDefinitionContext = (word, options = {}) => {
   const { definition_index } = options;
-  const requestURL = new URLSearchParams(`${apiHost}/words/${word}`);
-  requestURL.append("definition_index", definition_index);
+  const requestURL = new URL(`${apiHost}/words/${word}`);
+  requestURL.searchParams.append("definition_index", definition_index);
+  console.log(requestURL.toString());
   const headers = configApiHeader(getAPIConfig());
 
   return fetch(requestURL, {
-    method: "GET",
+    method: "DELETE",
     headers: headers,
   })
     .then((response) => response.json())
-    .then((body) => body.data)
     .catch((err) => {
       console.log(err);
     });

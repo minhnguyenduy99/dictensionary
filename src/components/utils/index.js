@@ -3,3 +3,4 @@ export { createComponent } from "./create-component";
 export { positionPopup } from "./position-popup";
 export { createBinaryTreeWord } from "./binary-tree-word";
 export { highlightSavedWords } from "./highlight-word";
+export { setContextPopup, openContextPopup } from "./open-context-popup";

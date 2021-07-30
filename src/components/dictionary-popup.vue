@@ -75,8 +75,7 @@ export default {
   },
   methods: {
     $_onMouseUpped() {
-      this.wordSelection = window.getSelection();
-      const selectedWord = this.wordSelection.toString().trim();
+      const selectedWord = this.$_getSelectionWord();
       if (selectedWord.length === 0) {
         return;
       }
@@ -124,6 +123,11 @@ export default {
         .getRangeAt(0)
         .getBoundingClientRect();
       positionPopup(wordPosition, this.$el);
+    },
+    $_getSelectionWord() {
+      this.wordSelection = window.getSelection();
+      let selections = this.wordSelection.toString().split(/[1-9\W]/);
+      return selections[0];
     },
   },
 };

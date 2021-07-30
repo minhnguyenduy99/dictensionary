@@ -1,4 +1,5 @@
 @import "./_base";
+@import "./_icon";
 
 button.ext-btn {
   --ext-btn-color: white;
@@ -23,7 +24,7 @@ button.ext-btn {
 
 button.ext-btn {
   &.ext-rounded {
-    border-radius: 60px;
+    border-radius: 1024px;
   }
 }
 
@@ -31,6 +32,10 @@ button.ext-btn {
   &.ext-small {
     padding: 5px 10px;
     font-size: 13px;
+
+    span.icon {
+      @extend .md-18;
+    }
   }
 }
 
@@ -43,16 +48,31 @@ button.ext-btn {
       background-color: hsl(2, 64%, 53%);
     }
   }
+
+  &.ext-primary-dark {
+    background-color: var(--ext-primary-dark);
+    color: var(--ext-btn-color);
+
+    &:hover {
+      background-color: hsl(116, 42%, 15%);
+    }
+  }
 }
 
 button.ext-btn.ext-icon {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 5px 10px;
 
   > span.icon:not(:first-child) {
     padding-left: 7px;
+  }
+
+  &.ext-small {
+    width: 32px;
+    height: 32px;
+    padding: 0;
   }
 }
 

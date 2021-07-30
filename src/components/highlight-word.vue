@@ -1,6 +1,7 @@
 <template>
   <span
-    @mouseup.capture.stop="$on_mouseUp"
+    @mouseup.capture.stop
+    @click="$on_highlightWordClicked"
     class="highlight-word ext-background-primary ext-color-light"
     :style="highlightWordStyle"
     >{{ word }}</span
@@ -8,6 +9,8 @@
 </template>
 
 <script>
+import { openContextPopup } from "./utils";
+
 export default {
   name: "HighlightWord",
   props: {
@@ -26,7 +29,12 @@ export default {
     },
   },
   methods: {
-    $on_mouseUp(ev) {},
+    $on_highlightWordClicked() {
+      openContextPopup(this.word, this.$el.getBoundingClientRect());
+    },
+    $setWord(word) {
+      this.word = word;
+    },
   },
 };
 </script>
