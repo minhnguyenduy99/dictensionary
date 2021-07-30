@@ -1,0 +1,80 @@
+@import "./_base";
+
+.transition {
+  transition: all 0.25s cubic-bezier(.53,.01,.35,1.5);
+}
+
+.ext-input {
+  --ext-input-color: var(--ext-primary);
+  > * {
+    font-size: 16px;
+  }
+
+  position: relative;
+  
+  &:first-of-type {
+    padding-top: 0;
+  }
+    
+  &:last-of-type {
+    padding-bottom: 0
+  }
+    
+  label {
+    @extend .transition;
+    transform-origin: left center;
+    color: var(--ext-input-color);
+    font-weight: 100;
+    letter-spacing: 0.01em;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    top: -10px;
+    left: 0;
+    display: block;
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    transform: scale(0.7);
+  }
+    
+    
+  input[type="text"], input[type="textarea"] {
+    @extend .transition;
+    appearance: none;
+    background-color: none;
+    border: 1px solid var(--ext-input-color);
+    line-height: 0;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: 20px 15px 10px 15px;
+    border-radius: 60px;
+    color: var(--ext-input-color);
+    letter-spacing: 0.01em;
+    position: relative;
+    z-index: 1;
+    font-size: 1em;
+    font-weight: bold;
+    
+    &:focus {
+      outline: none;
+      background: var(--ext-input-color);
+      color: white;
+      margin-top: 35px;
+      padding-top: 10px;
+      font-weight: normal;
+    }
+        
+    &:focus ~ label {
+      transform: translate(-10px, -30px) scale(1);
+      padding-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    // &:valid ~ label {
+    //   text-transform: uppercase;
+    //   font-style: italic;
+    //   transform: translate(5px,-35px) scale(0.6);;
+    // }
+  }
+}

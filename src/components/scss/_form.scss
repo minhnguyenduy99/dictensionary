@@ -1,0 +1,16 @@
+@import "./_utils";
+@import "./_input";
+
+.ext-form {
+  padding: 10px;
+  
+  > [class^="ext-"]:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .ext-btn-submit {
+    margin-top: 1rem;
+    width: 100%;
+  }
+}
+

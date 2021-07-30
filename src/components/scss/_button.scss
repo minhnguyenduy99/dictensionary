@@ -1,0 +1,59 @@
+@import "./_base";
+
+button.ext-btn {
+  --ext-btn-color: white;
+  --ext-btn-background-color: var(--ext-primary);
+  
+  padding: 10px 16px;
+  border: none;
+  box-shadow: none;
+  border-radius: 5px;
+  color: var(--ext-btn-color);
+  background-color: var(--ext-btn-background-color);
+  cursor: pointer;
+  transition: 0.1s ease-in;
+  height: auto;
+  white-space: nowrap;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: hsl(105, 85%, 30%);
+  }
+}
+
+button.ext-btn {
+  &.ext-rounded {
+    border-radius: 60px;
+  }
+}
+
+button.ext-btn {
+  &.ext-small {
+    padding: 5px 10px;
+    font-size: 13px;
+  }
+}
+
+button.ext-btn {
+  &.ext-danger {
+    background-color: var(--ext-danger);
+    color: var(--ext-btn-color);
+
+    &:hover {
+      background-color: hsl(2, 64%, 53%);
+    }
+  }
+}
+
+button.ext-btn.ext-icon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+
+  > span.icon:not(:first-child) {
+    padding-left: 7px;
+  }
+}
+
+

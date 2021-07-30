@@ -1,0 +1,27 @@
+@import "./_base";
+
+.popup {
+  --ext-popup-background-color: white;
+
+  position: absolute;
+  z-index: 100;
+
+  > div.popup__container {
+    position: relative;
+    padding: 12px;
+    background-color: var(--ext-popup-background-color);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    font-size: 16px;
+  }
+
+  & &__close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  &.ext-popup-close {
+    opacity: 0;
+    z-index: -1;
+  }
+}

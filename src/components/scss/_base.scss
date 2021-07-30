@@ -1,0 +1,40 @@
+:root {
+  --ext-primary-dark: #214A1E;
+  --ext-primary: hsl(105, 85%, 35%);;
+  --ext-danger: hsl(2, 64%, 58%);
+  --ext-light: #eeeeee;
+  --ext-dark: #121212;
+  --ext-background-color: var(--ext-light);
+  --ext-text-color: var(--ext-dark);
+  font-size: 16px;
+  line-height: 1.5rem;
+}
+
+.ext-theme-dark {
+  --ext-background-color: var(--ext-dark);
+  --ext-text-color: var(--ext-light);
+}
+
+.ext-background-primary {
+  background: var(--ext-primary);
+}
+
+.ext-background-primary-dark {
+  background: var(--ext-primary-dark);
+}
+
+.ext-color-primary {
+  color: var(--ext-primary);
+}
+
+.ext-color-primary-dark {
+  color: var(--ext-primary-dark);
+}
+
+.ext-color-light {
+  color: var(--ext-light);
+}
+
+.ext-color-dark {
+  color: var(--ext-dark);
+}

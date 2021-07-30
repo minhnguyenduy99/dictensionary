@@ -1,0 +1,25 @@
+@import "./_base";
+
+$card-padding: 5px 10px;
+$card-header-padding: $card-padding;
+$card-content-padding: $card-padding;
+
+.ext-card {
+  &__header {
+    padding: $card-header-padding;
+    background: var(--ext-background-color);
+    color: var(--ext-text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > .ext-car__icon {
+      margin-left: 7px;
+    }
+  }
+
+  &__content {
+    padding: $card-content-padding;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  }
+}

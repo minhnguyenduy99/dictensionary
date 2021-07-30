@@ -1,0 +1,13 @@
+@import "./utils";
+@import "./card";
+
+
+.ext-expand {
+  position: relative;
+  &__trigger {
+    z-index: 2;
+  }
+  &__content {
+    z-index: 1;
+  }
+}
