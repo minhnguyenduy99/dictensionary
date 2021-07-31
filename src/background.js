@@ -5,14 +5,17 @@ import {
   createWordContextHandler,
   getListSavedWordsHandler,
   deleteWordContextHandler,
+  toggleThemeHandler,
 } from "./message-handlers";
-import { syncAppStorage, initStorage, settingStorage } from "./storage";
+import { createAllStorages, initStorages } from "./storage";
 
 console.log("Background script is running");
 
 chrome.runtime.onMessage.addListener(onMessageReceived);
 chrome.runtime.onInstalled.addListener(onInstalled);
 chrome.tabs.onUpdated.addListener(onTabUpdated);
+
+const storages = createAllStorages(chrome.storage.sync);
 
 function onMessageReceived(request, sender, sendResponse) {
   const { type } = request;
@@ -37,6 +40,9 @@ function onMessageReceived(request, sender, sendResponse) {
         repository: DictionaryRepository,
       });
       break;
+    case MESSAGE_TYPES.TOGGLE_THEME:
+      toggleThemeHandler(request, sender, sendResponse);
+      break;
   }
 
   return true;
@@ -57,22 +63,21 @@ function onTabUpdated(tabId, changeInfo) {
 }
 
 function onInstalled(details) {
-  syncAppStorage();
   if (details.reason !== "install") {
-    settingStorage.getAppInfo().then((appInfo) => {
+    storages.settingsStorage.getAppInfo().then((appInfo) => {
       console.log(appInfo);
       configApiKey({ appKey: appInfo.app_key, appId: chrome.runtime.id });
     });
     return;
   }
-  initStorage().then(() => {
+  initStorages(Object.values(storages)).then(() => {
     const appId = chrome.runtime.id;
     SettingsRepository.assignApp(appId).then((data) => {
       if (!data) {
         console.error("Cannot assign app");
         return;
       }
-      return settingStorage
+      return storages.settingsStorage
         .saveAppSettings({
           app_key: data.api_key,
           created_date: data.created_date,

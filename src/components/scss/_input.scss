@@ -1,4 +1,10 @@
-@import "./_base";
+
+input {
+  &[type="color"] {
+    height: 16px;
+    width: 24px;
+  }
+}
 
 .transition {
   transition: all 0.25s cubic-bezier(.53,.01,.35,1.5);
@@ -23,7 +29,7 @@
   label {
     @extend .transition;
     transform-origin: left center;
-    color: var(--ext-input-color);
+    color: var(--ext-input-color) !important;
     font-weight: 100;
     letter-spacing: 0.01em;
     box-sizing: border-box;
@@ -41,7 +47,7 @@
   input[type="text"], input[type="textarea"] {
     @extend .transition;
     appearance: none;
-    background-color: none;
+    background-color: transparent;
     border: 1px solid var(--ext-input-color);
     line-height: 0;
     width: 100%;

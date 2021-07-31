@@ -3,6 +3,7 @@
     id="context-popup"
     :class="{
       'ext-theme popup dict': true,
+      'ext-theme-dark': useDarkTheme,
       'ext-popup-close': isClosed,
     }"
     @mouseup.stop
@@ -59,12 +60,14 @@
 
 <script>
 import { positionPopup, highlightSavedWords } from "./utils";
+import { ThemeMixin } from "./mixins";
 import { MESSAGE_TYPES } from "../message-handlers";
 import WordDefinition from "./word-definition.vue";
 import WordContext from "./word-context";
 
 export default {
   name: "ContextPopup",
+  mixins: [ThemeMixin],
   components: {
     WordContext,
     WordDefinition,
@@ -175,7 +178,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 #context-popup {
   min-width: 200px;
   max-width: 500px;

@@ -1,11 +1,15 @@
 import Vue from "vue";
-import { injectComponent, setContextPopup } from "../components/utils";
+import {
+  injectComponent,
+  setContextPopup,
+  togglePopupTheme,
+} from "../components/utils";
 import { DictionaryPopup, ContextPopup } from "../components";
 import { highlightSavedWords } from "../components/utils";
 import { MESSAGE_TYPES } from "../message-handlers";
 import "./inject-scripts";
 
-injectComponent(Vue, DictionaryPopup);
+const dictionaryPopup = injectComponent(Vue, DictionaryPopup);
 const contextPopup = injectComponent(Vue, ContextPopup);
 
 setContextPopup(contextPopup);
@@ -17,6 +21,10 @@ function onTabMessagedReceived(request) {
   switch (type) {
     case MESSAGE_TYPES.GET_LIST_WORDS: {
       highlightSavedWords(data);
+      break;
+    }
+    case MESSAGE_TYPES.TOGGLE_THEME: {
+      togglePopupTheme([dictionaryPopup, contextPopup], data.useDarkTheme);
       break;
     }
   }

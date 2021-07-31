@@ -1,15 +1,20 @@
-import _wordStorage from "./word.storage";
-import _settingStorage from "./settings.storage";
-import syncStorage from "./sync-storage";
+import { SettingsStorage } from "./settings.storage";
+import { WordStorage } from "./word.storage";
 
-export function syncAppStorage() {
-  _wordStorage.useStorage(syncStorage);
-  _settingStorage.useStorage(syncStorage);
+export { WordStorage } from "./word.storage";
+export { SettingsStorage } from "./settings.storage";
+
+/**
+ *
+ * @param {BaseStorage[]} storages
+ */
+export function initStorages(storages) {
+  return Promise.all(storages.map((storage) => storage.init()));
 }
 
-export async function initStorage() {
-  await Promise.all([_wordStorage.init(), _settingStorage.init()]);
+export function createAllStorages(storage) {
+  return {
+    wordStorage: new WordStorage(storage),
+    settingsStorage: new SettingsStorage(storage),
+  };
 }
-
-export const wordStorage = _wordStorage;
-export const settingStorage = _settingStorage;

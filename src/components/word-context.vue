@@ -7,11 +7,7 @@
       <p class="context__text">{{ context.textual_context }}</p>
     </div>
     <transition>
-      <ext-expand
-        v-model="open"
-        title="Definition"
-        headerClass="ext-color-light ext-background-primary"
-      >
+      <ext-expand v-model="open" title="Definition" headerClass="ext-primary">
         <div class="ext-content">
           <p>
             <span class="part-of-speech ext-text-weight-bold"
@@ -75,8 +71,7 @@ export default {
   border: 3px solid var(--ext-primary-dark);
   position: relative;
 
-  .ext-content {
-    padding: 5px 3rem 5px 3rem;
+  > .ext-content {
     min-height: 50px;
   }
 

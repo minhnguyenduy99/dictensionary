@@ -1,10 +1,15 @@
-@import "./_base";
 
 .popup {
-  --ext-popup-background-color: white;
+  --ext-popup-background-color: var(--ext-background-color);
+  --ext-popup-color: var(--ext-text-color);
 
   position: absolute;
   z-index: 100;
+  color: var(--ext-popup-color);
+
+  *:not([class^="ext"]) {
+    color: var(--ext-popup-color);
+  }
 
   > div.popup__container {
     position: relative;
@@ -23,5 +28,6 @@
   &.ext-popup-close {
     opacity: 0;
     z-index: -1;
+    position: fixed;
   }
 }

@@ -1,6 +1,15 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
+  css: {
+    loaderOptions: {
+      scss: {
+        prependData: `
+          @import "@/components/scss/main.scss";
+        `,
+      },
+    },
+  },
   pages: {
     popup: {
       template: "public/browser-extension.html",

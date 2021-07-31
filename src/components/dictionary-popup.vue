@@ -3,6 +3,7 @@
     id="dictionary-popup"
     :class="{
       'ext-theme popup dict': true,
+      'ext-theme-dark': useDarkTheme,
       'ext-popup-close': isClosed,
     }"
     @mouseup.stop
@@ -42,10 +43,12 @@
 <script>
 import { MESSAGE_TYPES } from "../message-handlers";
 import WordDefinition from "./word-definition.vue";
+import { ThemeMixin } from "./mixins";
 import { positionPopup, highlightSavedWords } from "./utils";
 
 export default {
   name: "DictionaryPopup",
+  mixins: [ThemeMixin],
   components: {
     WordDefinition,
   },
@@ -74,6 +77,9 @@ export default {
     },
   },
   methods: {
+    $setTheme(useDarkTheme) {
+      this.useDarkTheme = useDarkTheme;
+    },
     $_onMouseUpped() {
       const selectedWord = this.$_getSelectionWord();
       if (selectedWord.length === 0) {
@@ -134,11 +140,13 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./scss/_button.scss";
-@import "./scss/_popup.scss";
-
 #dictionary-popup {
   max-width: 80%;
+  max-height: 500px;
+
+  p {
+    margin: 0;
+  }
 }
 
 .dict {
@@ -152,6 +160,7 @@ export default {
       border: none;
       padding: 0;
       padding-right: 5px;
+      margin: 0;
     }
   }
 

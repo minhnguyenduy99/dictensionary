@@ -1,29 +1,26 @@
-export default {
-  storage: null,
+import { BaseStorage } from "./base-storage";
 
-  useStorage(storage) {
-    this.storage = storage;
-    return this;
-  },
+export class WordStorage extends BaseStorage {
   async init() {
     const wordStorageSetting = {
       en: {},
       jp: {},
     };
     try {
-      await this.storage.set(wordStorageSetting);
+      await this.set(wordStorageSetting);
       return true;
     } catch (err) {
       console.log("Init WordStorage: failed");
       return false;
     }
-  },
+  }
+
   async addWordDefinition(data) {
     const { word, definitionIndex, context } = data;
     try {
-      const result = await this.storage.get(["settings"]);
+      const result = await this.get(["settings"]);
       const language = result.settings.language;
-      let setOfWords = await this.storage.get([language]);
+      let setOfWords = await this.get([language]);
       let wordDefinition = setOfWords[language][word];
       if (!wordDefinition) {
         wordDefinition = {
@@ -36,15 +33,16 @@ export default {
         visualContext,
       };
       setOfWords[word] = wordDefinition;
-      await this.storage.set({ [language]: setOfWords });
+      await this.set({ [language]: setOfWords });
       return true;
     } catch (err) {
       console.log(err);
       return false;
     }
-  },
+  }
+
   async getAllWords(language = "en") {
-    const words = await this.storage.get([language]);
+    const words = await this.get([language]);
     return words;
-  },
-};
+  }
+}

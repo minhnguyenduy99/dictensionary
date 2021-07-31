@@ -1,6 +1,3 @@
-@import "./_base";
-@import "./_icon";
-
 button.ext-btn {
   --ext-btn-color: white;
   --ext-btn-background-color: var(--ext-primary);
@@ -19,6 +16,10 @@ button.ext-btn {
 
   &:hover {
     background-color: hsl(105, 85%, 30%);
+  }
+
+  * {
+    color: var(--ext-btn-color);
   }
 }
 
@@ -41,8 +42,7 @@ button.ext-btn {
 
 button.ext-btn {
   &.ext-danger {
-    background-color: var(--ext-danger);
-    color: var(--ext-btn-color);
+    --ext-btn-background-color: var(--ext-danger);
 
     &:hover {
       background-color: hsl(2, 64%, 53%);
@@ -50,8 +50,7 @@ button.ext-btn {
   }
 
   &.ext-primary-dark {
-    background-color: var(--ext-primary-dark);
-    color: var(--ext-btn-color);
+    --ext-btn-background-color: var(--ext-primary-dark);
 
     &:hover {
       background-color: hsl(116, 42%, 15%);
@@ -65,8 +64,12 @@ button.ext-btn.ext-icon {
   justify-content: center;
   padding: 5px 10px;
 
-  > span.icon:not(:first-child) {
-    padding-left: 7px;
+  > span.icon {
+    color: var(--ext-btn-color);
+
+    &:not(:first-child) {
+      padding-left: 7px;
+    }
   }
 
   &.ext-small {

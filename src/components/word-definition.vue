@@ -19,9 +19,7 @@
       <ext-expand
         v-model="contextOpen"
         title="Context"
-        :headerClass="
-          hasContext ? 'ext-color-light ext-background-primary' : ''
-        "
+        :headerClass="hasContext ? 'ext-primary' : ''"
       >
         <div class="ext-form">
           <div class="ext-input">
@@ -113,14 +111,16 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./scss/_form.scss";
-
 .dict__definition {
   border: 3px solid var(--ext-primary-dark);
 
   .dict__content {
     width: 80%;
     padding: 5px;
+
+    > p:first-child {
+      margin-bottom: 10px;
+    }
 
     .part-of-speech {
       font-weight: bold;
@@ -130,7 +130,7 @@ export default {
 
   .examples {
     > p {
-      padding: 10px 0 0 0;
+      padding: 10px 0;
     }
     ul > li {
       font-style: italic;
