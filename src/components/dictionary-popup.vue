@@ -142,7 +142,6 @@ export default {
 <style lang="scss">
 #dictionary-popup {
   max-width: 80%;
-  max-height: 500px;
 
   p {
     margin: 0;

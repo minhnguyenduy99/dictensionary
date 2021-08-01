@@ -1,5 +1,16 @@
 <template>
   <div class="context">
+    <div class="context__actions">
+      <button
+        class="
+          ext-btn ext-danger ext-small ext-icon ext-small ext-rounded
+          context__close
+        "
+        @click="$emit('delete')"
+      >
+        <span class="icon material-icons">delete</span>
+      </button>
+    </div>
     <div class="ext-content">
       <figure v-if="context.visual_context" class="context__image">
         <img class="image" :src="context.visual_context" />
@@ -27,15 +38,6 @@
         </div>
       </ext-expand>
     </transition>
-    <button
-      class="
-        ext-btn ext-danger ext-small ext-icon ext-small ext-rounded
-        context__close
-      "
-      @click="$emit('delete')"
-    >
-      <span class="icon material-icons">delete</span>
-    </button>
   </div>
 </template>
 
@@ -71,6 +73,12 @@ export default {
   border: 3px solid var(--ext-primary-dark);
   position: relative;
 
+  & > &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5px;
+  }
+
   > .ext-content {
     min-height: 50px;
   }
@@ -86,12 +94,6 @@ export default {
 
   &__text {
     text-align: center;
-  }
-
-  &__close {
-    position: absolute;
-    right: 5px;
-    top: 5px;
   }
 }
 </style>

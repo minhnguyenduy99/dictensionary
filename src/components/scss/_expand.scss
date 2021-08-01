@@ -4,6 +4,9 @@
 
   &__trigger {
     z-index: 2;
+    border: 1px solid grey;
+    border-collapse: collapse;
+    margin: -1px;
   }
   &__content {
     z-index: 1;

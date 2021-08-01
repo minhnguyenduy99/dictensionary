@@ -42,7 +42,6 @@ export default {
 <style lang="scss">
 .highlight-word {
   padding: 3px;
-  margin: 0 3px;
   border-radius: 3px;
   cursor: pointer;
   font-weight: bold;

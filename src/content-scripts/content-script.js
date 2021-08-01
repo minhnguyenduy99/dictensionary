@@ -5,7 +5,7 @@ import {
   togglePopupTheme,
 } from "../components/utils";
 import { DictionaryPopup, ContextPopup } from "../components";
-import { highlightSavedWords } from "../components/utils";
+import { highlightSavedWords, autoHighlightWords } from "../components/utils";
 import { MESSAGE_TYPES } from "../message-handlers";
 import "./inject-scripts";
 
@@ -15,6 +15,20 @@ const contextPopup = injectComponent(Vue, ContextPopup);
 setContextPopup(contextPopup);
 
 chrome.runtime.onMessage.addListener(onTabMessagedReceived);
+
+window.onload = (ev) => {
+  autoHighlightWords(() => {
+    const message = {
+      type: MESSAGE_TYPES.GET_LIST_WORDS,
+    };
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage(message, (response) => {
+        const { data } = response;
+        resolve(data);
+      });
+    });
+  });
+};
 
 function onTabMessagedReceived(request) {
   const { type, data } = request;
