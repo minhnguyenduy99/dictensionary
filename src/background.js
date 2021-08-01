@@ -6,6 +6,7 @@ import {
   getListSavedWordsHandler,
   deleteWordContextHandler,
   toggleThemeHandler,
+  styleHighlightHandler,
 } from "./message-handlers";
 import { createAllStorages, initStorages } from "./storage";
 
@@ -43,6 +44,9 @@ function onMessageReceived(request, sender, sendResponse) {
     case MESSAGE_TYPES.TOGGLE_THEME:
       toggleThemeHandler(request, sender, sendResponse);
       break;
+    case MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE:
+      styleHighlightHandler(request, sender, sendResponse);
+      break;
   }
 
   return true;
@@ -59,6 +63,15 @@ function onTabUpdated(tabId, changeInfo) {
       console.log("send tab message");
       chrome.tabs.sendMessage(tabId, message, null);
     });
+    setTimeout(() => {
+      storages.settingsStorage.getAppSettings().then((settings) => {
+        const message = {
+          type: MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE,
+          data: settings.highlightStyle,
+        };
+        chrome.tabs.sendMessage(tabId, message, null);
+      });
+    }, 2000);
   }
 }
 

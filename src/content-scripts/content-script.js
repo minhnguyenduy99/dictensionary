@@ -1,11 +1,16 @@
 import Vue from "vue";
+import { SettingsStorage } from "../storage";
 import {
   injectComponent,
   setContextPopup,
   togglePopupTheme,
 } from "../components/utils";
 import { DictionaryPopup, ContextPopup } from "../components";
-import { highlightSavedWords, autoHighlightWords } from "../components/utils";
+import {
+  highlightSavedWords,
+  autoHighlightWords,
+  highlightStyleObserver,
+} from "../components/utils";
 import { MESSAGE_TYPES } from "../message-handlers";
 import "./inject-scripts";
 
@@ -28,6 +33,12 @@ window.onload = (ev) => {
       });
     });
   });
+  setTimeout(() => {
+    new SettingsStorage(chrome.storage.sync).getAppSettings((settings) => {
+      console.log("load style");
+      highlightStyleObserver.updateStyle(settings.highlightStyle);
+    });
+  }, 2000);
 };
 
 function onTabMessagedReceived(request) {
@@ -39,6 +50,10 @@ function onTabMessagedReceived(request) {
     }
     case MESSAGE_TYPES.TOGGLE_THEME: {
       togglePopupTheme([dictionaryPopup, contextPopup], data.useDarkTheme);
+      break;
+    }
+    case MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE: {
+      highlightStyleObserver.updateStyle(data);
       break;
     }
   }

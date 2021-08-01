@@ -9,6 +9,11 @@ export class SettingsStorage extends BaseStorage {
       },
       settings: {
         useDarkTheme: true,
+        highlightStyle: {
+          backgroundColor: "hsl(105, 85%, 35%)",
+          color: "white",
+          opacity: 100,
+        },
         language: "en",
       },
     };
@@ -51,6 +56,16 @@ export class SettingsStorage extends BaseStorage {
     try {
       const storage = await this.get(["settings"]);
       storage.settings.useDarkTheme = useDarkTheme;
+      await this.set({ settings: storage.settings });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async updateHighlightStyle(style) {
+    try {
+      const storage = await this.get(["settings"]);
+      storage.settings.highlightStyle = style;
       await this.set({ settings: storage.settings });
     } catch (err) {
       console.error(err);

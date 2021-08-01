@@ -31,7 +31,7 @@
                 type="color"
                 id="head"
                 name="head"
-                v-model="highlightColors.textColor"
+                v-model.lazy="highlightStyle.color"
               />
             </div>
             <div class="field">
@@ -40,8 +40,16 @@
                 type="color"
                 id="head"
                 name="head"
-                v-model="highlightColors.backgroundColor"
+                v-model.lazy="highlightStyle.backgroundColor"
               />
+            </div>
+            <div class="field vertical">
+              <label>Opacity</label>
+              <ext-slider v-model.lazy="highlightStyle.opacity">
+                <template>
+                  <p>{{ highlightStyle.opacity }}</p>
+                </template>
+              </ext-slider>
             </div>
           </div>
         </div>
@@ -52,6 +60,7 @@
 
 <script>
 import ExtSwitch from "../components/base/switch.vue";
+import ExtSlider from "../components/base/slider.vue";
 import { MESSAGE_TYPES } from "../message-handlers";
 import { SettingsStorage } from "../storage";
 
@@ -64,15 +73,13 @@ export default {
   name: "App",
   components: {
     ExtSwitch,
+    ExtSlider,
   },
   data: () => ({
     updating: false,
     wordContextCount: 0,
     useDarkTheme: null,
-    highlightColors: {
-      textColor: "",
-      backgroundColor: "",
-    },
+    highlightStyle: {},
   }),
   computed: {
     switchThemeLabel() {
@@ -87,6 +94,13 @@ export default {
       }
       this.$_toggleTheme();
     },
+    highlightStyle: {
+      deep: true,
+      handler(val) {
+        console.log("style changed");
+        this.$_updateStyle();
+      },
+    },
   },
   created: function () {
     if (!storage) {
@@ -99,7 +113,6 @@ export default {
   },
   methods: {
     $_toggleTheme() {
-      console.log("toggle theme");
       const message = {
         type: MESSAGE_TYPES.TOGGLE_THEME,
         data: { useDarkTheme: this.useDarkTheme },
@@ -119,8 +132,17 @@ export default {
     },
     $_syncConfig() {
       storage.getAppSettings().then((settings) => {
-        console.log(settings);
         this.useDarkTheme = settings.useDarkTheme;
+        this.highlightStyle = settings.highlightStyle;
+      });
+    },
+    $_updateStyle() {
+      storage.updateHighlightStyle(this.highlightStyle).then(() => {
+        const message = {
+          type: MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE,
+          data: this.highlightStyle,
+        };
+        chrome.runtime.sendMessage(message);
       });
     },
   },
@@ -173,7 +195,7 @@ html {
 
 .field-group {
   > .field:not(:last-child) {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 }
 
@@ -181,6 +203,14 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+
+  &.vertical {
+    display: block;
+
+    label {
+      margin-bottom: 10px;
+    }
+  }
 
   label {
     font-size: 1rem;

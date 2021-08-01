@@ -2,29 +2,33 @@
   <span
     @mouseup.capture.stop
     @click="$on_highlightWordClicked"
-    class="highlight-word ext-background-primary ext-color-light"
-    :style="highlightWordStyle"
+    class="highlight-word"
+    :style="computedHighlightWordStyle"
     >{{ word }}</span
   >
 </template>
 
 <script>
-import { openContextPopup } from "./utils";
+import { openContextPopup, highlightStyleObserver } from "./utils";
 
 export default {
   name: "HighlightWord",
-  props: {
-    color: String,
-    backgroundColor: String,
-  },
   data: () => ({
     word: "",
+    highlightWordStyle: {},
   }),
+  mounted: function () {
+    highlightStyleObserver.addListener((style) => {
+      this.highlightWordStyle = style;
+    });
+  },
   computed: {
-    highlightWordStyle() {
+    computedHighlightWordStyle() {
+      const { color, backgroundColor, opacity } = this.highlightWordStyle;
       return {
-        background: this.backgroundColor,
-        color: this.color,
+        color,
+        backgroundColor,
+        opacity: opacity / 100,
       };
     },
   },
@@ -49,7 +53,7 @@ export default {
   transition: 0.15s ease-in;
 
   &:hover {
-    opacity: 1;
+    opacity: 1 !important;
   }
 }
 </style>
