@@ -7,7 +7,7 @@
       </p>
       <p class="definition">{{ definition.definition }}</p>
       <div v-if="hasExample" class="examples">
-        <p>Examples:</p>
+        <p class="ext-text-weight-bold">Examples:</p>
         <ul>
           <li v-for="example in definition.examples" :key="example.id">
             {{ example }}
@@ -115,7 +115,6 @@ export default {
   border: 3px solid var(--ext-primary-dark);
 
   .dict__content {
-    width: 80%;
     padding: 5px;
 
     > p:first-child {
@@ -130,10 +129,18 @@ export default {
 
   .examples {
     > p {
-      padding: 10px 0;
+      padding: 10px 0 0 0;
+      margin-bottom: 10px;
+      width: fit-content;
+      border-bottom: 5px solid var(--ext-primary);
     }
-    ul > li {
-      font-style: italic;
+    ul {
+      list-style-position: outside;
+      margin-left: 10px;
+
+      > li {
+        font-style: italic;
+      }
     }
   }
 }

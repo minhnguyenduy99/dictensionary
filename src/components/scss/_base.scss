@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
 :root {
   --ext-primary-dark: hsl(116, 42%, 20%);
   --ext-primary: hsl(105, 85%, 35%);;
@@ -6,8 +8,12 @@
   --ext-dark: #121212;
   --ext-background-color: var(--ext-light);
   --ext-text-color: var(--ext-dark);
+}
+
+[ext] {
   font-size: 16px;
   line-height: 1.5rem;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .ext-theme-dark {

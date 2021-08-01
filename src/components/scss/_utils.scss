@@ -11,3 +11,13 @@
 .ext-text-weight-bold {
   font-weight: bold;
 }
+
+.ext-groups {
+  display: flex;
+  flex-wrap: wrap;
+
+  > :not(:last-child) {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+}

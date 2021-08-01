@@ -6,7 +6,7 @@
     }"
     @mouseup.stop
   >
-    <div class="ext-groups">
+    <div class="ext-popup-groups">
       <div class="group">
         <p class="group__title">Number of words</p>
         <p class="group__content">{{ wordContextCount }}</p>
@@ -151,7 +151,7 @@ html {
   padding: 8px;
 }
 
-.ext-groups {
+.ext-popup-groups {
   > .group:not(:last-child) {
     margin-bottom: 1rem;
   }

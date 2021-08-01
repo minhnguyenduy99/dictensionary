@@ -79,4 +79,27 @@ button.ext-btn.ext-icon {
   }
 }
 
+button.ext-btn.ext-outlined {
+  background: transparent;
+  color: var(--ext-btn-background-color);
+  border: 1px solid var(--ext-btn-background-color);
+
+  &.ext-icon {
+    > span.icon {
+      color: var(--ext-btn-background-color);
+    }
+  }
+
+  &:hover {
+    background-color: var(--ext-btn-background-color);
+    color: var(--ext-btn-color);
+    
+    &.ext-icon {
+      > span.icon {
+        color: var(--ext-btn-color);
+      }
+    }
+  }
+}
+
 

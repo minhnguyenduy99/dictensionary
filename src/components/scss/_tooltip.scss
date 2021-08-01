@@ -1,0 +1,70 @@
+.ext-tooltip {
+  --tooltip-background-color: var(--ext-dark);
+  --tooltip-text-color: var(--ext-light);
+
+  position: relative;
+  display: inline-block;
+
+  & > &__text {
+    visibility: hidden;
+    font-size: 12px;
+    background-color: var(--tooltip-background-color);;
+    color: var(--tooltip-text-color);
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    width: fit-content;
+    white-space: nowrap;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+
+  &:hover {
+    > .ext-tooltip__text {
+      visibility: visible;
+    }
+  }
+}
+
+// theme
+.ext-tooltip {
+  &.ext-primary {
+    --tooltip-background-color: var(--ext-primary);
+    --tooltip-text-color: var(--ext-light);
+  }
+
+  &.ext-danger {
+    --tooltip-background-color: var(--ext-danger);
+    --tooltip-text-color: var(--ext-light);
+  }
+}
+
+// position
+.ext-tooltip {
+  &.ext-left {
+    > .ext-tooltip__text {
+      left: -105%;
+      top: -5px;
+    }
+  }
+  &.ext-top {
+    > .ext-tooltip__text {
+      left: -50%;
+      bottom: 105%;
+    }
+  }
+  &.ext-bottom {
+    > .ext-tooltip__text {
+      top: 110%;
+      left: -150%;
+    }
+  }
+  &.ext-right {
+    > .ext-tooltip__text {
+      top: -5px;
+      right: -105%;
+    }
+  }
+}

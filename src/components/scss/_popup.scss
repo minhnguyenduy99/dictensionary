@@ -21,10 +21,11 @@
     font-size: 16px;
   }
 
-  & &__close-btn {
+  & &__actions {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 0;
+    top: 0;
+    padding: 10px;
   }
 
   &.ext-popup-close {

@@ -1,5 +1,6 @@
 <template>
   <div
+    ext
     id="dictionary-popup"
     :class="{
       'ext-theme popup dict': true,
@@ -30,13 +31,15 @@
         <h3>Cannot found definition of this word</h3>
       </div>
     </div>
-    <button
-      class="ext-btn ext-icon ext-small ext-danger popup__close-btn"
-      @click="isClosed = true"
-      @mouseup.stop
-    >
-      <span class="icon material-icons">close</span>
-    </button>
+    <div class="popup__actions ext-groups">
+      <button
+        class="ext-btn ext-icon ext-small ext-danger"
+        @click="isClosed = true"
+        @mouseup.stop
+      >
+        <span class="icon material-icons">close</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -142,10 +145,7 @@ export default {
 <style lang="scss">
 #dictionary-popup {
   max-width: 80%;
-
-  p {
-    margin: 0;
-  }
+  min-width: 200px;
 }
 
 .dict {
@@ -164,7 +164,7 @@ export default {
   }
 
   & &__definitions {
-    ul {
+    > ul {
       list-style: none;
       margin: 0;
       padding: 0;

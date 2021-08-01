@@ -1,5 +1,6 @@
 <template>
   <div
+    ext
     id="context-popup"
     :class="{
       'ext-theme popup dict': true,
@@ -48,13 +49,33 @@
         </transition>
       </section>
     </div>
-    <button
-      class="ext-btn ext-icon ext-small ext-danger popup__close-btn"
-      @click="isClosed = true"
-      @mouseup.stop
-    >
-      <span class="icon material-icons">close</span>
-    </button>
+    <div class="popup__actions ext-groups">
+      <div class="ext-tooltip ext-bottom ext-danger">
+        <button
+          class="
+            ext-btn
+            ext-danger
+            ext-small
+            ext-icon
+            ext-small
+            ext-rounded
+            ext-outlined
+            context__close
+          "
+          @click="$emit('delete')"
+        >
+          <span class="icon material-icons">delete</span>
+        </button>
+        <p class="ext-tooltip__text">Delete all contexts</p>
+      </div>
+      <button
+        class="ext-btn ext-icon ext-small ext-danger popup__close-btn"
+        @click="isClosed = true"
+        @mouseup.stop
+      >
+        <span class="icon material-icons">close</span>
+      </button>
+    </div>
   </div>
 </template>
 
