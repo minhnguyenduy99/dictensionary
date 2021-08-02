@@ -8,8 +8,40 @@
   >
     <div class="ext-popup-groups">
       <div class="group">
-        <p class="group__title">Number of words</p>
-        <p class="group__content">{{ wordContextCount }}</p>
+        <p class="group__title">Info</p>
+        <div class="group__content">
+          <div
+            class="
+              ext-flex
+              ext-flex-justify-content-space-between
+              ext-flex-align-items-center
+            "
+          >
+            <div>
+              <p>Number of words</p>
+              <p class="ext-title">{{ words.length }}</p>
+            </div>
+            <div class="ext-groups ext-vertical">
+              <div class="ext-input no-animation">
+                <input type="text" v-model.lazy="wordSearch" />
+                <label>Search for words</label>
+              </div>
+            </div>
+          </div>
+          <ext-expand
+            :open.sync="listWordsExpanded"
+            rounded
+            :title="`List of words (${filteredWords.length})`"
+            headerClass="ext-primary"
+            style="margin-top: 10px"
+          >
+            <list-words
+              :words="filteredWords"
+              emptyText="No words found"
+              @remove="$_removeWord"
+            />
+          </ext-expand>
+        </div>
       </div>
       <div class="group">
         <p class="group__title">Theme</p>
@@ -47,7 +79,7 @@
               <label>Opacity</label>
               <ext-slider v-model.lazy="highlightStyle.opacity">
                 <template>
-                  <p>{{ highlightStyle.opacity }}</p>
+                  <p class="ext-size-3">{{ highlightStyle.opacity }}</p>
                 </template>
               </ext-slider>
             </div>
@@ -60,7 +92,9 @@
 
 <script>
 import ExtSwitch from "../components/base/switch.vue";
+import ExtExpand from "../components/base/expand.vue";
 import ExtSlider from "../components/base/slider.vue";
+import ListWords from "./list-words.vue";
 import { MESSAGE_TYPES } from "../message-handlers";
 import { SettingsStorage } from "../storage";
 
@@ -74,16 +108,29 @@ export default {
   components: {
     ExtSwitch,
     ExtSlider,
+    ListWords,
+    ExtExpand,
   },
   data: () => ({
+    listWordsExpanded: false,
     updating: false,
+    wordSearch: "",
     wordContextCount: 0,
     useDarkTheme: null,
+    words: [],
     highlightStyle: {},
   }),
   computed: {
     switchThemeLabel() {
       return this.useDarkTheme ? "Dark theme" : "Light theme";
+    },
+    filteredWords() {
+      if (!this.wordSearch) {
+        return this.words;
+      }
+      return this.words.filter(
+        (word) => word.indexOf(this.wordSearch.toLowerCase()) !== -1
+      );
     },
   },
   watch: {
@@ -126,8 +173,24 @@ export default {
         type: MESSAGE_TYPES.GET_LIST_WORDS,
       };
       chrome.runtime.sendMessage(message, (response) => {
+        const { data: words } = response;
+        this.words = words;
+      });
+    },
+    $_removeWord(data) {
+      const { word, index } = data;
+      const message = {
+        type: MESSAGE_TYPES.DELETE_CONTEXT,
+        data: {
+          word,
+        },
+      };
+      chrome.runtime.sendMessage(message, (response) => {
         const { data } = response;
-        this.wordContextCount = data?.length ?? 0;
+        if (!data.success) {
+          return;
+        }
+        this.$delete(this.words, index);
       });
     },
     $_syncConfig() {
@@ -153,7 +216,7 @@ export default {
 @import "../components/scss/main.scss";
 
 html {
-  width: 300px;
+  width: 400px;
   height: auto;
 
   body {
@@ -161,16 +224,15 @@ html {
     box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px,
       rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
     border-radius: 7px;
-
-    * {
-      color: var(--ext-text-color);
-      background: var(--ext-background-color);
-    }
   }
 }
 
 #extension-popup {
   padding: 8px;
+  position: relative;
+  z-index: 2;
+  background: var(--ext-background-color);
+  color: var(--ext-text-color);
 }
 
 .ext-popup-groups {
@@ -188,7 +250,6 @@ html {
     }
     &__content {
       margin: 0;
-      font-size: 1.5rem;
     }
   }
 }
@@ -205,7 +266,8 @@ html {
   align-items: baseline;
 
   &.vertical {
-    display: block;
+    flex-direction: column;
+    align-items: stretch;
 
     label {
       margin-bottom: 10px;
@@ -215,5 +277,13 @@ html {
   label {
     font-size: 1rem;
   }
+}
+
+.list-words__popup {
+  position: fixed;
+  left: -100px;
+  top: 0;
+  max-width: 300px;
+  z-index: 99;
 }
 </style>

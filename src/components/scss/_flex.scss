@@ -1,0 +1,27 @@
+.ext-flex {
+  display: flex;
+  &-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+@mixin setFlexProperty($property, $value) {
+  .ext-flex-#{$property}-#{$value} {
+    #{$property}: #{$value};
+  }
+}
+
+$flexAligns: "flex-start", "flex-end","center","baseline", "space-between", "space-evenly";
+$flexDirection: "column", "row";
+
+@each $value in $flexAligns {
+  @include setFlexProperty("justify-content", $value);
+}
+
+@each $value in $flexAligns {
+  @include setFlexProperty("align-items", $value);
+}
+
+@each $value in $flexDirection {
+  @include setFlexProperty("flex-direction", $value);
+}

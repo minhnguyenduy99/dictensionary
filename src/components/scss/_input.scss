@@ -61,26 +61,35 @@ input {
     z-index: 1;
     font-size: 1em;
     font-weight: bold;
-    
+
     &:focus {
       outline: none;
-      background: var(--ext-input-color);
-      color: white;
-      margin-top: 35px;
-      padding-top: 10px;
-      font-weight: normal;
+      // background: var(--ext-input-color);
+      // color: white;
+      // font-weight: normal;
     }
         
-    &:focus ~ label {
-      transform: translate(-10px, -30px) scale(1);
-      padding-bottom: 5px;
-      font-weight: bold;
-    }
-    
-    // &:valid ~ label {
-    //   text-transform: uppercase;
-    //   font-style: italic;
-    //   transform: translate(5px,-35px) scale(0.6);;
+    // &:focus ~ label {
+    //   font-weight: bold;
     // }
+  }
+
+  &:not(.no-animation) {
+    input[type="text"], input[type="textarea"] {
+      &:focus {
+        outline: none;
+        background: var(--ext-input-color);
+        color: white;
+        margin-top: 35px;
+        padding-top: 10px;
+        font-weight: normal;
+      }
+          
+      &:focus ~ label {
+        transform: translate(-10px, -30px) scale(1);
+        padding-bottom: 5px;
+        font-weight: bold;
+      }
+    }
   }
 }

@@ -8,6 +8,8 @@
   --ext-dark: #121212;
   --ext-background-color: var(--ext-light);
   --ext-text-color: var(--ext-dark);
+  --animate-delay: 0;
+  --animate-duration: 300ms;
 }
 
 [ext] {

@@ -1,0 +1,26 @@
+
+.ext-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+$fontSizes: (
+  1: 2.5rem,
+  2: 2rem,
+  3: 1.5rem,
+  4: 1.25rem,
+  5: 1rem,
+  6: 0.75rem,
+  7: 0.5rem
+);
+
+@mixin fontSize($index) {
+  .ext-size-#{$index} {
+    $size: map-get($fontSizes, $index);
+    font-size: #{$size};
+  }
+}
+
+@each $index, $value in $fontSizes {
+  @include fontSize($index);
+}

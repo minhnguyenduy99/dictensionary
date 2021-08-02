@@ -2,7 +2,7 @@
   injectStyle(
     "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
   );
-  injectStyle("https://fonts.googleapis.com/icon?family=Material+Icons");
+  // injectStyle("https://fonts.googleapis.com/icon?family=Material+Icons");
 })();
 
 function injectStyle(href) {

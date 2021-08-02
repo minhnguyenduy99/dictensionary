@@ -30,8 +30,8 @@ export const addDefinitionContext = (word, options) => {
 export const deleteDefinitionContext = (word, options = {}) => {
   const { definition_index } = options;
   const requestURL = new URL(`${apiHost}/words/${word}`);
-  requestURL.searchParams.append("definition_index", definition_index);
-  console.log(requestURL.toString());
+  definition_index !== undefined &&
+    requestURL.searchParams.append("definition_index", definition_index);
   const headers = configApiHeader(getAPIConfig());
 
   return fetch(requestURL, {
