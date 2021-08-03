@@ -1,5 +1,5 @@
 <template>
-  <div class="ext-tag">
+  <div :class="['ext-tag', active ? 'ext-active' : '']">
     <span class="ext-size-5">{{ tag }}</span>
     <slot v-if="hasAction" name="action" v-bind="{ tag }">
       <button
@@ -17,6 +17,10 @@ export default {
   name: "ExtTag",
   props: {
     tag: String,
+    active: {
+      type: Boolean,
+      default: () => false,
+    },
     hasAction: {
       type: Boolean,
       default: () => false,
@@ -36,19 +40,24 @@ export default {
   color: var(--tag-color);
   padding: 2px 2px 2px 10px;
   border-radius: 20px;
-  border: 1px solid var(--ext-primary);
+  border: 1px solid var(--ext-primary-dark);
   background: transparent;
   cursor: pointer;
   transition: 0.15s ease-in;
 
-  &:hover {
-    background: var(--ext-primary);
-    color: white;
-  }
-
   > span:first-child {
     margin-right: 5px;
     margin-top: -2px;
+  }
+
+  &:hover:not(.ext-active) {
+    background: var(--ext-primary-dark);
+    color: white;
+  }
+
+  &.ext-active {
+    background: var(--ext-primary);
+    color: white;
   }
 }
 </style>

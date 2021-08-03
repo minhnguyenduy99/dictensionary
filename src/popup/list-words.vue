@@ -6,6 +6,7 @@
           v-for="(word, index) in words"
           :key="word.id"
           :tag="word"
+          :active="actives(word, index)"
           :hasAction="true"
           actionIcon="clear"
           @actionClicked="$emit('remove', { index, word })"
@@ -30,6 +31,10 @@ export default {
   },
   props: {
     words: Array,
+    actives: {
+      type: Function,
+      default: (word, index) => true,
+    },
     emptyText: String,
   },
   computed: {

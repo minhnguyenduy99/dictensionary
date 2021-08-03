@@ -11,7 +11,7 @@
         <span class="icon material-icons">delete</span>
       </button>
     </div>
-    <div class="ext-content">
+    <div class="context__info ext-content">
       <figure v-if="context.visual_context" class="context__image">
         <img class="image" :src="context.visual_context" />
       </figure>
@@ -79,8 +79,14 @@ export default {
     padding: 5px;
   }
 
-  > .ext-content {
+  &__info {
     min-height: 50px;
+  }
+
+  .ext-content {
+    > *:not(:last-child) {
+      margin-bottom: 10px;
+    }
   }
 
   &__image {
@@ -94,6 +100,18 @@ export default {
 
   &__text {
     text-align: center;
+  }
+
+  .part-of-speech {
+    margin-right: 7px;
+  }
+
+  .examples {
+    > p:first-child {
+      width: fit-content;
+      border-bottom: 5px solid var(--ext-primary);
+      margin-bottom: 10px;
+    }
   }
 }
 </style>

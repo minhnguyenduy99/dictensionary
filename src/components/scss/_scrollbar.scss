@@ -1,0 +1,16 @@
+[ext] {
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--ext-background-color);
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--ext-primary-dark);
+    border-radius: 60px;
+  }  
+}

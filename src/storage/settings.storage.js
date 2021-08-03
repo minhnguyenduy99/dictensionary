@@ -12,7 +12,7 @@ export class SettingsStorage extends BaseStorage {
         highlightStyle: {
           backgroundColor: "hsl(105, 85%, 35%)",
           color: "white",
-          opacity: 100,
+          opacity: 80,
         },
         language: "en",
       },

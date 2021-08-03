@@ -144,8 +144,7 @@ export default {
 
 <style lang="scss">
 #dictionary-popup {
-  max-width: 80%;
-  min-width: 200px;
+  width: 400px;
 }
 
 .dict {

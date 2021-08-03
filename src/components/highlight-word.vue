@@ -1,10 +1,10 @@
 <template>
   <span
-    @mouseup.capture.stop
+    @mouseup.capture="$on_mouseUp"
     @click="$on_highlightWordClicked"
     class="highlight-word"
     :style="computedHighlightWordStyle"
-    >{{ word }}</span
+    >{{ _word }}</span
   >
 </template>
 
@@ -14,11 +14,14 @@ import { openContextPopup, highlightStyleObserver } from "./utils";
 export default {
   name: "HighlightWord",
   data: () => ({
-    word: "",
+    word: null,
     highlightWordStyle: {},
   }),
   mounted: function () {
-    highlightStyleObserver.addListener((style) => {
+    const elementId = Date.now().toString();
+    this.$el.setAttribute("highlight-word-id", elementId);
+    this.highlightWordStyle = { ...highlightStyleObserver.style };
+    highlightStyleObserver.addListener(elementId, (style) => {
       this.highlightWordStyle = style;
     });
   },
@@ -31,13 +34,30 @@ export default {
         opacity: opacity / 100,
       };
     },
+    _word() {
+      return this.word;
+    },
   },
   methods: {
+    $setWord(word) {
+      if (word === " ") {
+        return;
+      }
+      this.word = word;
+    },
+    $_isDestroyed() {
+      return !this.$el.classList.contains("highlight-word");
+    },
     $on_highlightWordClicked() {
+      if (this.$_isDestroyed()) {
+        return;
+      }
       openContextPopup(this.word, this.$el.getBoundingClientRect());
     },
-    $setWord(word) {
-      this.word = word;
+    $on_mouseUp(ev) {
+      if (!this.$_isDestroyed()) {
+        ev.stopPropagation();
+      }
     },
   },
 };

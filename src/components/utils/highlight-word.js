@@ -1,6 +1,7 @@
 import Vue from "vue";
 import { default as HighlightWord } from "../highlight-word";
 import { createComponent } from "./create-component";
+import highlightStyleObserver from "./highlight-style-observer";
 
 const highlightQuerySelector = `
     p:not(#dictionary-popup *, #context-popup *),
@@ -10,36 +11,36 @@ const highlightQuerySelector = `
     h4:not(#dictionary-popup *, #context-popup *),
     h5:not(#dictionary-popup *, #context-popup *),
     h6:not(#dictionary-popup *, #context-popup *),
-    span:not(#dictionary-popup *, #context-popup *, .highlight-word)
+    dd:not(#dictionary-popup *, #context-popup *),
+    div > span
   `;
 
 /**
  *
  * @param {() => string[] | Promise<string[]>} getListWordsHandler
+ * @param {(highlightInfo) => void} highlightUpdateCallback
  */
-export async function autoHighlightWords(getListWordsHandler) {
+export function autoHighlightWords(getListWordsHandler, highlightStyle = null) {
   let lastBodyHeight = window.innerHeight;
+
   const resizeObserver = new ResizeObserver((entries) => {
-    return new Promise((resolve) => {
-      resolve(getListWordsHandler());
-    }).then((words) => {
+    return Promise.resolve(getListWordsHandler()).then((words) => {
       const body = entries[0];
       // calculate the expanded size
       const expandedYPosition = lastBodyHeight;
       lastBodyHeight = body.contentRect.height;
-      console.log("ScrollY: " + expandedYPosition);
-      const current = Date.now();
-      console.log("New element: " + current);
       // highlight words in expanded size
-      highlightSavedWords(words, (el) => {
-        const onExpanded =
-          el.getBoundingClientRect().top + window.scrollY > expandedYPosition;
-        onExpanded && console.log(el.getBoundingClientRect().top);
-        return onExpanded;
-      });
+      highlightSavedWords(
+        words,
+        (el) => {
+          const onExpanded =
+            el.getBoundingClientRect().top + window.scrollY > expandedYPosition;
+          return onExpanded;
+        },
+        highlightStyle
+      );
     });
   });
-
   resizeObserver.observe(document.body, { box: "content-box" });
 }
 
@@ -50,8 +51,10 @@ export async function autoHighlightWords(getListWordsHandler) {
  */
 export async function highlightSavedWords(
   listWords,
-  elementFilterCallback = (el) => true
+  elementFilterCallback = (el) => true,
+  highlightStyle = null
 ) {
+  const foundWords = {};
   const elements = Array.from(
     document.querySelectorAll(highlightQuerySelector).values()
   );
@@ -60,9 +63,31 @@ export async function highlightSavedWords(
       if (!elementFilterCallback(element)) {
         return;
       }
-      createHighlightFromElements(element, listWords);
+      createHighlightFromElements(element, listWords, foundWords);
     })
   );
+  highlightStyle && highlightStyleObserver.updateStyle(highlightStyle);
+  highlightStyleObserver.updateHighlightInfo({ foundWords });
+}
+
+/**
+ * @param {string} word
+ */
+export function unhighlightWord(word) {
+  const highlightEls = Array.from(
+    document.getElementsByClassName("highlight-word")
+  );
+  const elementIds = [];
+  highlightEls.forEach((highlightEl) => {
+    if (highlightEl.textContent.toLowerCase() === word) {
+      const elementId = highlightEl.getAttribute("highlight-word-id");
+      highlightEl.classList.remove("highlight-word");
+      highlightEl.removeAttribute("style");
+      elementIds.push(elementId);
+    }
+  });
+  highlightStyleObserver.removeWord(word);
+  highlightStyleObserver.removeListenersByIds(elementIds);
 }
 
 /**
@@ -70,23 +95,29 @@ export async function highlightSavedWords(
  * @param {Element} element
  * @param {string[]} searchWords
  */
-function createHighlightFromElements(element, searchWords) {
+function createHighlightFromElements(element, searchWords, foundWords) {
   const newChildren = [];
   element.childNodes.forEach((child) => {
     // a text-type element
     if (child.nodeType === 3) {
-      newChildren.push(...splitTextElement(child, searchWords));
+      newChildren.push(...splitTextElement(child, searchWords, foundWords));
       return;
     }
-    if (!child.classList?.contains("highlight-word")) {
+    const childTextContent = child.textContent;
+    if (
+      child.classList?.contains("highlight-word") &&
+      childTextContent !== ""
+    ) {
+      foundWords[childTextContent.toLowerCase()] = 1;
+    } else {
       // recursively create highlight element from child
-      createHighlightFromElements(child, searchWords);
+      createHighlightFromElements(child, searchWords, foundWords);
     }
 
     newChildren.push(child);
   });
   element.textContent = "";
-  element.append?.(...newChildren);
+  element.append(...newChildren);
 }
 
 /**
@@ -95,36 +126,55 @@ function createHighlightFromElements(element, searchWords) {
  * @param {string[]} searchWords
  * @returns
  */
-function splitTextElement(textElement, searchWords) {
-  const newElements = [];
+function splitTextElement(textElement, searchWords, foundWords) {
   let textContent = textElement.textContent;
+  const newElements = [textContent];
 
-  searchWords.every((word) => {
-    const regex = new RegExp(word + "\\b", "gi");
-    let wordIndex = textContent.search(regex);
-    while (wordIndex !== -1) {
-      const textFirstFragment = textContent.slice(0, wordIndex);
-      const highlight = createComponent(Vue, HighlightWord);
-      const searchWord = textContent.substr(wordIndex, word.length);
-      textContent = textContent.slice(wordIndex + word.length);
-
-      newElements.push(textFirstFragment, highlight.$el);
-      highlight.$children[0].$setWord(searchWord);
-
-      wordIndex = textContent.search(regex);
+  searchWords.forEach((word) => {
+    let elementCount = newElements.length;
+    while (elementCount > 0) {
+      const currentElement = newElements.shift();
+      // is highlight element
+      if (typeof currentElement !== "string") {
+        newElements.push(currentElement);
+        elementCount--;
+        continue;
+      }
+      let splitTextElements = splitTextToWords(currentElement, word);
+      // word is not found
+      if (splitTextElements.length > 1) {
+        foundWords[word] = 1;
+      }
+      newElements.push(...splitTextElements);
+      elementCount--;
     }
-    if (textContent === "") {
-      // stop iterating through the rest of words
-      return false;
-    }
-    return true;
   });
 
-  if (textContent === "") {
+  return newElements;
+
+  /**
+   *
+   * @param {Element} textElement
+   * @param {string} word
+   */
+  function splitTextToWords(textContent, word) {
+    let newElements = [];
+    let tempTextContent = textContent;
+    const regex = new RegExp(word + "\\b", "gi");
+    let wordIndex = tempTextContent.search(regex);
+    while (wordIndex !== -1) {
+      const textFirstFragment = tempTextContent.slice(0, wordIndex);
+      const highlight = createComponent(Vue, HighlightWord);
+      const searchWord = tempTextContent.substr(wordIndex, word.length);
+      tempTextContent = tempTextContent.slice(wordIndex + word.length);
+
+      textFirstFragment !== "" && newElements.push(textFirstFragment);
+      newElements.push(highlight.$el);
+      highlight.$children[0].$setWord(searchWord);
+
+      wordIndex = tempTextContent.search(regex);
+    }
+    tempTextContent !== "" && newElements.push(tempTextContent);
     return newElements;
   }
-
-  newElements.push(textContent);
-
-  return newElements;
 }

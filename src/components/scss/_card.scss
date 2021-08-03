@@ -4,8 +4,8 @@ $card-content-padding: $card-padding;
 
 .ext-card {
   &__header {
-    --card-header-color: black;
-    --card-header-background-color: var(--ext-light); 
+    --card-header-color: var(--ext-text-color);
+    --card-header-background-color: var(--ext-background-color); 
 
     background: var(--card-header-background-color);
     padding: $card-header-padding;

@@ -50,7 +50,7 @@
       </section>
     </div>
     <div class="popup__actions ext-groups">
-      <div class="ext-tooltip ext-bottom ext-danger">
+      <!-- <div class="ext-tooltip ext-bottom ext-danger">
         <button
           class="
             ext-btn
@@ -67,7 +67,7 @@
           <span class="icon material-icons">delete</span>
         </button>
         <p class="ext-tooltip__text">Delete all contexts</p>
-      </div>
+      </div> -->
       <button
         class="ext-btn ext-icon ext-small ext-danger popup__close-btn"
         @click="isClosed = true"
@@ -85,6 +85,7 @@ import { ThemeMixin } from "./mixins";
 import { MESSAGE_TYPES } from "../message-handlers";
 import WordDefinition from "./word-definition.vue";
 import WordContext from "./word-context";
+import { unhighlightWord } from "./utils/highlight-word";
 
 export default {
   name: "ContextPopup",
@@ -186,6 +187,7 @@ export default {
         // the context is deleted
         if (data.deleted) {
           this.isClosed = true;
+          unhighlightWord(this.word.word);
         }
       });
     },
@@ -201,8 +203,7 @@ export default {
 
 <style lang="scss">
 #context-popup {
-  min-width: 200px;
-  max-width: 500px;
+  width: 400px;
 }
 
 #definition-area {

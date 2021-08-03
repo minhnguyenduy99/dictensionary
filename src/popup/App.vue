@@ -1,5 +1,6 @@
 <template>
   <div
+    ext
     id="extension-popup"
     :class="{
       'ext-theme-dark': useDarkTheme,
@@ -10,23 +11,19 @@
       <div class="group">
         <p class="group__title">Info</p>
         <div class="group__content">
-          <div
-            class="
-              ext-flex
-              ext-flex-justify-content-space-between
-              ext-flex-align-items-center
-            "
-          >
+          <div class="group__info">
             <div>
-              <p>Number of words</p>
-              <p class="ext-title">{{ words.length }}</p>
+              <p class="ext-size-6">Number of words</p>
+              <p class="group__value ext-title">{{ words.length }}</p>
             </div>
-            <div class="ext-groups ext-vertical">
-              <div class="ext-input no-animation">
-                <input type="text" v-model.lazy="wordSearch" />
-                <label>Search for words</label>
-              </div>
+            <div>
+              <p class="ext-size-6">Found on this page</p>
+              <p class="group__value ext-title">{{ foundWordsCount }}</p>
             </div>
+          </div>
+          <div class="ext-input no-animation" style="margin-top: 10px">
+            <input type="text" v-model.lazy="wordSearch" />
+            <label>Search for words</label>
           </div>
           <ext-expand
             :open.sync="listWordsExpanded"
@@ -38,6 +35,7 @@
             <list-words
               :words="filteredWords"
               emptyText="No words found"
+              :actives="(word, index) => foundWords[word] === 1"
               @remove="$_removeWord"
             />
           </ext-expand>
@@ -54,7 +52,7 @@
         </div>
       </div>
       <div class="group">
-        <p class="group__title">Highlight component</p>
+        <p class="group__title">Adjust highlight style</p>
         <div class="group__content">
           <div class="field-group">
             <div class="field">
@@ -79,7 +77,9 @@
               <label>Opacity</label>
               <ext-slider v-model.lazy="highlightStyle.opacity">
                 <template>
-                  <p class="ext-size-3">{{ highlightStyle.opacity }}</p>
+                  <div class="ext-flex ext-flex-justify-content-center">
+                    <p class="ext-size-5">{{ highlightStyle.opacity }}</p>
+                  </div>
                 </template>
               </ext-slider>
             </div>
@@ -118,6 +118,7 @@ export default {
     wordContextCount: 0,
     useDarkTheme: null,
     words: [],
+    foundWords: {},
     highlightStyle: {},
   }),
   computed: {
@@ -131,6 +132,10 @@ export default {
       return this.words.filter(
         (word) => word.indexOf(this.wordSearch.toLowerCase()) !== -1
       );
+    },
+    foundWordsCount() {
+      return Object.values(this.foundWords).filter((found) => found === 1)
+        .length;
     },
   },
   watch: {
@@ -157,6 +162,7 @@ export default {
   },
   mounted: function () {
     this.$_getSavedWords();
+    this.$_getFoundWordsOfTab();
   },
   methods: {
     $_toggleTheme() {
@@ -166,6 +172,22 @@ export default {
       };
       storage.useTheme(this.useDarkTheme).then(() => {
         chrome.runtime.sendMessage(message);
+      });
+    },
+    $_getFoundWordsOfTab() {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        if (!activeTab) {
+          return;
+        }
+        const message = {
+          type: MESSAGE_TYPES.GET_FOUND_WORDS,
+        };
+        chrome.tabs.sendMessage(activeTab.id, message, (response) => {
+          const { data: foundWords } = response;
+          console.log(foundWords);
+          this.foundWords = foundWords;
+        });
       });
     },
     $_getSavedWords() {
@@ -191,6 +213,7 @@ export default {
           return;
         }
         this.$delete(this.words, index);
+        this.$on_contextDeleted(word);
       });
     },
     $_syncConfig() {
@@ -206,6 +229,21 @@ export default {
           data: this.highlightStyle,
         };
         chrome.runtime.sendMessage(message);
+      });
+    },
+    $on_contextDeleted(word) {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        if (!activeTab) {
+          return;
+        }
+        const message = {
+          type: MESSAGE_TYPES.UNHIGHLIGHT_WROD,
+          data: { word },
+        };
+        chrome.tabs.sendMessage(activeTab.id, message, (response) => {
+          this.$delete(this.foundWords, word);
+        });
       });
     },
   },
@@ -233,6 +271,24 @@ html {
   z-index: 2;
   background: var(--ext-background-color);
   color: var(--ext-text-color);
+
+  .group {
+    &__info {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      justify-content: flex-start;
+      column-gap: 1rem;
+
+      > * {
+        width: fit-content;
+        text-align: center;
+      }
+    }
+
+    &__value {
+      text-align: center;
+    }
+  }
 }
 
 .ext-popup-groups {
