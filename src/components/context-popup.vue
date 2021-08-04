@@ -141,7 +141,6 @@ export default {
         const { data } = response;
         if (!data) {
           this.word = null;
-          this.$_positionPopup();
           this.isClosed = false;
           return;
         }
@@ -150,7 +149,6 @@ export default {
         this.contexts =
           contexts?.items ?? new Array(word.definitions.length).fill(false);
         this.isClosed = false;
-        this.$_positionPopup(position);
       });
     },
     $_updateWordContext(index, context) {
@@ -190,12 +188,6 @@ export default {
           unhighlightWord(this.word.word);
         }
       });
-    },
-    $_positionPopup(wordPosition) {
-      if (!this.word) {
-        return;
-      }
-      positionPopup(wordPosition, this.$el);
     },
   },
 };

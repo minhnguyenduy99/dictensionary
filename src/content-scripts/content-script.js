@@ -2,6 +2,7 @@ import Vue from "vue";
 import { SettingsStorage } from "../storage";
 import {
   injectComponent,
+  positionPopup,
   setContextPopup,
   togglePopupTheme,
 } from "../components/utils";
@@ -37,6 +38,8 @@ window.onload = (ev) => {
         });
       });
     }, settings.highlightStyle);
+    positionPopup(dictionaryPopup.$el, { position: settings.popupPosition });
+    positionPopup(contextPopup.$el, { position: settings.popupPosition });
   });
 };
 
@@ -68,6 +71,13 @@ function onTabMessagedReceived(request, sender, sendResponse) {
       sendResponse({
         data: highlightStyleObserver.getHighlightInfo()?.foundWords,
       });
+      break;
+    }
+    case MESSAGE_TYPES.CHANGE_POPUP_POSITION: {
+      console.log("change position");
+      console.log(data);
+      positionPopup(dictionaryPopup.$el, { position: data.position });
+      positionPopup(contextPopup.$el, { position: data.position });
       break;
     }
   }

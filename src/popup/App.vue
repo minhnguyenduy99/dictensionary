@@ -52,6 +52,29 @@
         </div>
       </div>
       <div class="group">
+        <p class="group__title">Popup position</p>
+        <div class="group__content">
+          <div class="ext-radio-buttons">
+            <label
+              v-for="position in listPositions"
+              :key="position.id"
+              class="ext-radio"
+            >
+              <span class="ext-radio__input">
+                <input
+                  v-model="selectedPosition"
+                  type="radio"
+                  name="radio"
+                  :value="position"
+                />
+                <span class="ext-radio__control"></span>
+              </span>
+              <span class="ext-radio__label">{{ position | capitalize }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="group">
         <p class="group__title">Adjust highlight style</p>
         <div class="group__content">
           <div class="field-group">
@@ -120,6 +143,8 @@ export default {
     words: [],
     foundWords: {},
     highlightStyle: {},
+    selectedPosition: null,
+    listPositions: ["left", "right"],
   }),
   computed: {
     switchThemeLabel() {
@@ -149,9 +174,21 @@ export default {
     highlightStyle: {
       deep: true,
       handler(val) {
-        console.log("style changed");
         this.$_updateStyle();
       },
+    },
+    selectedPosition(val) {
+      if (!val) {
+        return;
+      }
+      this.$_changePopupPosition();
+    },
+  },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return "";
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
     },
   },
   created: function () {
@@ -190,6 +227,21 @@ export default {
         });
       });
     },
+    $_changePopupPosition() {
+      storage.updatePopupPosition(this.selectedPosition).then(() => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          const activeTab = tabs[0];
+          if (!activeTab) {
+            return;
+          }
+          const message = {
+            type: MESSAGE_TYPES.CHANGE_POPUP_POSITION,
+            data: { position: this.selectedPosition },
+          };
+          chrome.tabs.sendMessage(activeTab.id, message);
+        });
+      });
+    },
     $_getSavedWords() {
       const message = {
         type: MESSAGE_TYPES.GET_LIST_WORDS,
@@ -220,6 +272,7 @@ export default {
       storage.getAppSettings().then((settings) => {
         this.useDarkTheme = settings.useDarkTheme;
         this.highlightStyle = settings.highlightStyle;
+        this.selectedPosition = settings.popupPosition;
       });
     },
     $_updateStyle() {

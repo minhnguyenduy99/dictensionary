@@ -96,7 +96,6 @@ export default {
         const { data } = response;
         if (!data) {
           this.word = null;
-          this.$_positionPopup();
           this.isClosed = false;
           return;
         }
@@ -105,7 +104,6 @@ export default {
         this.contexts =
           contexts?.items ?? new Array(word.definitions.length).fill(false);
         this.isClosed = false;
-        this.$_positionPopup();
       });
     },
     $_updateWordContext(index, context) {
@@ -123,15 +121,6 @@ export default {
         console.log("UPdate context");
         highlightSavedWords([this.word.word]);
       });
-    },
-    $_positionPopup() {
-      if (!this.wordSelection) {
-        return;
-      }
-      const wordPosition = this.wordSelection
-        .getRangeAt(0)
-        .getBoundingClientRect();
-      positionPopup(wordPosition, this.$el);
     },
     $_getSelectionWord() {
       this.wordSelection = window.getSelection();

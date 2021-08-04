@@ -14,6 +14,7 @@ export class SettingsStorage extends BaseStorage {
           color: "white",
           opacity: 80,
         },
+        popupPosition: "left",
         language: "en",
       },
     };
@@ -56,6 +57,19 @@ export class SettingsStorage extends BaseStorage {
     try {
       const storage = await this.get(["settings"]);
       storage.settings.useDarkTheme = useDarkTheme;
+      await this.set({ settings: storage.settings });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  /**
+   * @param {"left" | "right"} position
+   */
+  async updatePopupPosition(position) {
+    try {
+      const storage = await this.get(["settings"]);
+      storage.settings.popupPosition = position;
       await this.set({ settings: storage.settings });
     } catch (err) {
       console.error(err);
