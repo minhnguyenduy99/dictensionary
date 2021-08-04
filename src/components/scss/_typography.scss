@@ -1,17 +1,17 @@
 
 .ext-title {
-  font-size: 1.5rem;
+  font-size: 1.5em;
   font-weight: bold;
 }
 
 $fontSizes: (
-  1: 2.5rem,
-  2: 2rem,
-  3: 1.5rem,
-  4: 1.25rem,
-  5: 1rem,
-  6: 0.75rem,
-  7: 0.5rem
+  1: 2.5em,
+  2: 2em,
+  3: 1.5em,
+  4: 1.25em,
+  5: 1em,
+  6: 0.75em,
+  7: 0.5em
 );
 
 @mixin fontSize($index) {

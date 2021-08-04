@@ -36,7 +36,10 @@ export class DictionaryWord {
       const defObj = {
         ...def,
         pronunciation:
-          pronunciation[partOfSpeech] ?? pronunciation.all ?? pronunciation,
+          this.pronunciation?.[partOfSpeech] ??
+          this.pronunciation?.all ??
+          this.pronunciation ??
+          null,
       };
       return new WordDefinition(defObj);
     });

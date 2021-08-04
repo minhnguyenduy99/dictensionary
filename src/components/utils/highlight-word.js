@@ -20,10 +20,18 @@ const highlightQuerySelector = `
  * @param {() => string[] | Promise<string[]>} getListWordsHandler
  * @param {(highlightInfo) => void} highlightUpdateCallback
  */
-export function autoHighlightWords(getListWordsHandler, highlightStyle = null) {
+export function autoHighlightWords(
+  getListWordsHandler,
+  highlightStyle = highlightStyleObserver.style
+) {
   let lastBodyHeight = window.innerHeight;
+  let lastUpdatedTime = 0;
+  let defaultTimeSpan = 5000; // 10 seconds
 
   const resizeObserver = new ResizeObserver((entries) => {
+    if (!bounce()) {
+      return Promise.resolve();
+    }
     return Promise.resolve(getListWordsHandler()).then((words) => {
       const body = entries[0];
       // calculate the expanded size
@@ -42,6 +50,15 @@ export function autoHighlightWords(getListWordsHandler, highlightStyle = null) {
     });
   });
   resizeObserver.observe(document.body, { box: "content-box" });
+
+  function bounce() {
+    const current = Date.now();
+    if (current - lastUpdatedTime < defaultTimeSpan) {
+      return false;
+    }
+    lastUpdatedTime = current;
+    return true;
+  }
 }
 
 /**
@@ -58,16 +75,21 @@ export async function highlightSavedWords(
   const elements = Array.from(
     document.querySelectorAll(highlightQuerySelector).values()
   );
-  await Promise.all(
-    elements.map(async (element) => {
-      if (!elementFilterCallback(element)) {
-        return;
-      }
-      createHighlightFromElements(element, listWords, foundWords);
-    })
-  );
-  highlightStyle && highlightStyleObserver.updateStyle(highlightStyle);
-  highlightStyleObserver.updateHighlightInfo({ foundWords });
+  try {
+    await Promise.all(
+      elements.map(async (element) => {
+        if (!elementFilterCallback(element)) {
+          throw Error("Stop finding elements");
+        }
+        createHighlightFromElements(element, listWords, foundWords);
+      })
+    );
+  } catch (err) {
+    console.log("Stop finding elements");
+
+    highlightStyle && highlightStyleObserver.updateStyle(highlightStyle);
+    highlightStyleObserver.updateHighlightInfo({ foundWords });
+  }
 }
 
 /**
@@ -117,7 +139,7 @@ function createHighlightFromElements(element, searchWords, foundWords) {
     newChildren.push(child);
   });
   element.textContent = "";
-  element.append(...newChildren);
+  element.append && element.append(...newChildren);
 }
 
 /**

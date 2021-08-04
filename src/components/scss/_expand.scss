@@ -4,7 +4,7 @@
 
   &__trigger {
     z-index: 2;
-    border: 1px solid grey;
+    border: 1px solid var(--ext-primary-dark);
     border-collapse: collapse;
     margin: -1px;
     transition: 0.15s ease;
@@ -12,7 +12,8 @@
     &:hover {
       filter: brightness(0.95);
     }
-  }
+  } 
+
   &__content {
     z-index: 1;
   }

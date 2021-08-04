@@ -11,7 +11,7 @@
   >
     <div v-if="word" class="popup__container">
       <div class="dict__word">
-        <h2 class="word">{{ word.word }}</h2>
+        <h2 class="word ext-size-3">{{ word.word }}</h2>
       </div>
       <div class="dict__definitions">
         <ul>

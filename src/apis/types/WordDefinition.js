@@ -40,6 +40,6 @@ export class WordDefinition {
     this.partOfSpeech = partOfSpeech;
     this.synonyms = synonyms;
     this.examples = examples;
-    this.pronunciation = `/${pronunciation}/`;
+    this.pronunciation = pronunciation ? `/${pronunciation}/` : "";
   }
 }
