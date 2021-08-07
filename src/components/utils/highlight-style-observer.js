@@ -10,7 +10,6 @@ export default {
   },
   updateHighlightInfo(highlightInfo) {
     const { foundWords } = highlightInfo;
-    console.log(foundWords);
     this.highlightInfo.foundWords = {
       ...this.highlightInfo.foundWords,
       ...foundWords,

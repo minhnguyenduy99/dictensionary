@@ -163,7 +163,6 @@ export default {
       };
       chrome.runtime.sendMessage(message, (response) => {
         this.isLoading = false;
-        console.log("UPdate context");
         highlightSavedWords([this.word.word]);
       });
     },
@@ -176,7 +175,6 @@ export default {
         },
       };
       chrome.runtime.sendMessage(message, (response) => {
-        console.log(response);
         const { data } = response;
         if (!data.success) {
           return;

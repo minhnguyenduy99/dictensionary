@@ -4,7 +4,6 @@ import { configApiHeader } from "./utils";
 export default {
   apiHost: process.env.VUE_APP_API_ENDPOINT,
   assignApp(appId) {
-    console.log(this.apiHost);
     const fullRequestURL = `${this.apiHost}/apps/assign/${appId}`;
     return fetch(fullRequestURL, {
       method: "POST",
@@ -15,7 +14,7 @@ export default {
         return data;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         return false;
       });
   },
@@ -32,7 +31,7 @@ export default {
         return data;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         return false;
       });
   },

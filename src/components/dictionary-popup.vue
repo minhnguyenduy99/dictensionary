@@ -68,8 +68,6 @@ export default {
     contexts: [],
     wordSelection: null,
     isClosed: true,
-    isLoading: false,
-    wordCollection: [],
   }),
   mounted: function () {
     document.body.addEventListener("mouseup", this.$_onMouseUpped);
@@ -107,7 +105,6 @@ export default {
       });
     },
     $_updateWordContext(index, context) {
-      this.isLoading = true;
       const message = {
         type: MESSAGE_TYPES.CREATE_WORD_CONTEXT,
         data: {
@@ -117,8 +114,11 @@ export default {
         },
       };
       chrome.runtime.sendMessage(message, (response) => {
-        this.isLoading = false;
-        console.log("UPdate context");
+        console.log(response);
+        const { data } = response;
+        if (!data.success) {
+          return;
+        }
         highlightSavedWords([this.word.word]);
       });
     },

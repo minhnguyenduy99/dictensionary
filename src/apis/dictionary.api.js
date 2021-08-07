@@ -8,7 +8,6 @@ export const addDefinitionContext = (word, options) => {
   const { definition_index, textual_context, visual_context } = options;
   const fullRequestURL = `${apiHost}/words/${word}`;
   const headers = configApiHeader(getAPIConfig());
-  console.log(options);
 
   return fetch(fullRequestURL, {
     method: "PUT",
@@ -22,7 +21,7 @@ export const addDefinitionContext = (word, options) => {
     .then((response) => response.json())
     .then((body) => ({ success: true }))
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       return { success: false };
     });
 };
@@ -40,7 +39,7 @@ export const deleteDefinitionContext = (word, options = {}) => {
   })
     .then((response) => response.json())
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 };
 

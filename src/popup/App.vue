@@ -26,7 +26,7 @@
             <label>Search for words</label>
           </div>
           <ext-expand
-            :open.sync="listWordsExpanded"
+            v-model="listWordsExpanded"
             rounded
             :title="`List of words (${filteredWords.length})`"
             headerClass="ext-primary"
@@ -222,7 +222,6 @@ export default {
         };
         chrome.tabs.sendMessage(activeTab.id, message, (response) => {
           const { data: foundWords } = response;
-          console.log(foundWords);
           this.foundWords = foundWords;
         });
       });
@@ -304,12 +303,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../components/scss/main.scss";
-
 html {
-  width: 400px;
-  height: auto;
-
   body {
     margin: 0;
     box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px,
@@ -320,6 +314,8 @@ html {
 
 #extension-popup {
   padding: 8px;
+  width: 400px;
+  height: auto;
   position: relative;
   z-index: 2;
   background: var(--ext-background-color);

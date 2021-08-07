@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "__MSG_extName__",
+  "name": "Dictensionary",
   "homepage_url": "http://localhost:8080/",
-  "description": "A Vue Browser Extension",
+  "description": "Looks up words on dictionary, saves your word with context and highlights it on every page you visit",
   "default_locale": "en",
   "permissions": [
     "activeTab",
@@ -32,7 +32,7 @@
   "devtools_page": "devtools.html",
   "browser_action": {
     "default_popup": "popup.html",
-    "default_title": "__MSG_extName__",
+    "default_title": "Dictensionary",
     "default_icon": {
       "19": "icons/19.png",
       "38": "icons/38.png"

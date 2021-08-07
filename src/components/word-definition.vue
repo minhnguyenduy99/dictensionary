@@ -23,7 +23,7 @@
       >
         <div class="ext-form">
           <div class="ext-input">
-            <input type="text" v-model="currentContext.textual_context" />
+            <input type="text" v-model.lazy="currentContext.textual_context" />
             <label>Textual context</label>
           </div>
           <div class="ext-input">
@@ -87,22 +87,10 @@ export default {
     definition(val) {
       this.contextOpen = false;
     },
-    context(val) {
-      if (!val) {
-        this.currentContext = {
-          textual_context: null,
-          visual_context: null,
-        };
-        return;
-      }
-      this.currentContext = val;
-      this.$nextTick(() => {
-        console.log(this.hasContext);
-      });
-    },
   },
   methods: {
     $on_updateContext() {
+      console.log("update context");
       this.$emit("update:context", this.currentContext);
       this.$emit("contextChanged", this.currentContext);
     },

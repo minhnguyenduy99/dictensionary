@@ -10,8 +10,8 @@ export class SettingsStorage extends BaseStorage {
       settings: {
         useDarkTheme: true,
         highlightStyle: {
-          backgroundColor: "hsl(105, 85%, 35%)",
-          color: "white",
+          backgroundColor: "#33A50D",
+          color: "#ffffff",
           opacity: 80,
         },
         popupPosition: "left",
@@ -22,7 +22,7 @@ export class SettingsStorage extends BaseStorage {
       await this.set(settings);
       return true;
     } catch (err) {
-      console.log("Init WordStorage: failed");
+      console.error("Init WordStorage: failed");
       return false;
     }
   }
@@ -38,7 +38,7 @@ export class SettingsStorage extends BaseStorage {
       });
       return true;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return false;
     }
   }
@@ -48,7 +48,7 @@ export class SettingsStorage extends BaseStorage {
       const storage = await this.get(["settings"]);
       return storage.settings;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return null;
     }
   }
@@ -91,7 +91,7 @@ export class SettingsStorage extends BaseStorage {
       const result = await this.get(["app_info"]);
       return result.app_info;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return null;
     }
   }

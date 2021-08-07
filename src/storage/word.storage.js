@@ -10,7 +10,7 @@ export class WordStorage extends BaseStorage {
       await this.set(wordStorageSetting);
       return true;
     } catch (err) {
-      console.log("Init WordStorage: failed");
+      console.error("Init WordStorage: failed");
       return false;
     }
   }
@@ -36,7 +36,7 @@ export class WordStorage extends BaseStorage {
       await this.set({ [language]: setOfWords });
       return true;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return false;
     }
   }

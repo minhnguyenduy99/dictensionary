@@ -57,7 +57,6 @@ export default {
   }),
   computed: {
     context() {
-      console.log(this.definition);
       return this.definition?.context;
     },
     hasExample() {

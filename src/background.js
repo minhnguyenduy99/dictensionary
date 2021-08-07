@@ -60,7 +60,6 @@ function onTabUpdated(tabId, changeInfo) {
         type: MESSAGE_TYPES.GET_LIST_WORDS,
         data: words,
       };
-      console.log("send tab message");
       chrome.tabs.sendMessage(tabId, message, null);
     });
     setTimeout(() => {
@@ -78,7 +77,6 @@ function onTabUpdated(tabId, changeInfo) {
 function onInstalled(details) {
   if (details.reason !== "install") {
     storages.settingsStorage.getAppInfo().then((appInfo) => {
-      console.log(appInfo);
       configApiKey({ appKey: appInfo.app_key, appId: chrome.runtime.id });
     });
     return;

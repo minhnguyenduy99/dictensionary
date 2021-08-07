@@ -25,7 +25,7 @@ chrome.runtime.onMessage.addListener(onTabMessagedReceived);
 
 let storage = new SettingsStorage(chrome.storage.sync);
 
-window.onload = (ev) => {
+window.onload = () => {
   storage.getAppSettings().then((settings) => {
     autoHighlightWords(() => {
       const message = {
@@ -48,7 +48,7 @@ function onTabMessagedReceived(request, sender, sendResponse) {
   switch (type) {
     case MESSAGE_TYPES.GET_LIST_WORDS: {
       storage.getAppSettings().then((settings) => {
-        highlightSavedWords(data, (el) => true, settings.highlightStyle);
+        highlightSavedWords(data, () => true, settings.highlightStyle);
       });
       break;
     }
@@ -74,8 +74,6 @@ function onTabMessagedReceived(request, sender, sendResponse) {
       break;
     }
     case MESSAGE_TYPES.CHANGE_POPUP_POSITION: {
-      console.log("change position");
-      console.log(data);
       positionPopup(dictionaryPopup.$el, { position: data.position });
       positionPopup(contextPopup.$el, { position: data.position });
       break;

@@ -85,11 +85,13 @@ export async function highlightSavedWords(
       })
     );
   } catch (err) {
-    console.log("Stop finding elements");
-
-    highlightStyle && highlightStyleObserver.updateStyle(highlightStyle);
-    highlightStyleObserver.updateHighlightInfo({ foundWords });
+    // catch error to stop the promise
+    console.log("stop");
   }
+
+  console.log(foundWords);
+  highlightStyle && highlightStyleObserver.updateStyle(highlightStyle);
+  highlightStyleObserver.updateHighlightInfo({ foundWords });
 }
 
 /**

@@ -10,9 +10,7 @@
         @click="$_toggleOpen"
       >
         <p class="ext-card__title">{{ title }}</p>
-        <span class="ext-card__icon material-icons">
-          {{ _open ? openIcon : closeIcon }}
-        </span>
+        <span class="ext-card__icon material-icons">{{ _expandIcon }}</span>
       </div>
     </slot>
     <transition
@@ -39,11 +37,11 @@ export default {
     title: String,
     openIcon: {
       type: String,
-      default: () => "expand_more",
+      default: "expand_more",
     },
     closeIcon: {
       type: String,
-      default: () => "chevron_left",
+      default: "chevron_left",
     },
     rounded: {
       type: Boolean,
@@ -52,22 +50,25 @@ export default {
   },
   model: {
     prop: "open",
-    event: "opened",
+    event: "input",
   },
   computed: {
+    _expandIcon() {
+      return this._open ? this.openIcon : this.closeIcon;
+    },
     _open: {
       get() {
         return this.open;
       },
       set(val) {
-        this.$emit("opened", val);
-        this.$emit("update:open", val);
+        this.$emit("input", val);
       },
     },
   },
   methods: {
     $_toggleOpen() {
-      this._open = !this._open;
+      console.log("toggle open");
+      this._open = !this.open;
     },
   },
 };
