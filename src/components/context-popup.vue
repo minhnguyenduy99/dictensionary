@@ -73,7 +73,9 @@
         @click="isClosed = true"
         @mouseup.stop
       >
-        <span class="icon material-icons">close</span>
+        <span class="icon">
+          <i class="fas fa-times"></i>
+        </span>
       </button>
     </div>
   </div>

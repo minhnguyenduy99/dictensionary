@@ -1,4 +1,4 @@
-$card-padding: 10px 10px;
+$card-padding: 10px 14px;
 $card-header-padding: $card-padding;
 $card-content-padding: $card-padding;
 
@@ -13,7 +13,7 @@ $card-content-padding: $card-padding;
     justify-content: space-between;
     align-items: center;
 
-    > .ext-car__icon {
+    > .ext-card__icon {
       margin-left: 7px;
     }
 

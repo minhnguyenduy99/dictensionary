@@ -107,6 +107,7 @@ export function unhighlightWord(word) {
       const elementId = highlightEl.getAttribute("highlight-word-id");
       highlightEl.classList.remove("highlight-word");
       highlightEl.removeAttribute("style");
+      highlightEl.removeAttribute("highlight-word-id");
       elementIds.push(elementId);
     }
   });
@@ -164,12 +165,12 @@ function splitTextElement(textElement, searchWords, foundWords) {
         elementCount--;
         continue;
       }
-      let splitTextElements = splitTextToWords(currentElement, word);
+      let { elements, found } = splitTextToWords(currentElement, word);
       // word is not found
-      if (splitTextElements.length > 1) {
+      if (found) {
         foundWords[word] = 1;
       }
-      newElements.push(...splitTextElements);
+      newElements.push(...elements);
       elementCount--;
     }
   });
@@ -186,7 +187,9 @@ function splitTextElement(textElement, searchWords, foundWords) {
     let tempTextContent = textContent;
     const regex = new RegExp(word + "\\b", "gi");
     let wordIndex = tempTextContent.search(regex);
+    let found = false;
     while (wordIndex !== -1) {
+      found = true;
       const textFirstFragment = tempTextContent.slice(0, wordIndex);
       const highlight = createComponent(Vue, HighlightWord);
       const searchWord = tempTextContent.substr(wordIndex, word.length);
@@ -199,6 +202,9 @@ function splitTextElement(textElement, searchWords, foundWords) {
       wordIndex = tempTextContent.search(regex);
     }
     tempTextContent !== "" && newElements.push(tempTextContent);
-    return newElements;
+    return {
+      elements: newElements,
+      found,
+    };
   }
 }

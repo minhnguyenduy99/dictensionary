@@ -6,7 +6,9 @@
         class="ext-btn ext-icon ext-extra-small ext-danger ext-rounded"
         @click="$emit('actionClicked')"
       >
-        <span class="icon material-icons md-18">{{ actionIcon }}</span>
+        <span class="icon ext-small">
+          <i :class="actionIcon"></i>
+        </span>
       </button>
     </slot>
   </div>

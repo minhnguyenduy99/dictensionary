@@ -8,7 +8,9 @@
         "
         @click="$emit('delete')"
       >
-        <span class="icon material-icons">delete</span>
+        <span class="icon">
+          <i class="fas fa-trash"></i>
+        </span>
       </button>
     </div>
     <div class="context__info ext-content">

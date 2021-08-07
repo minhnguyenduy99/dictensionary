@@ -8,7 +8,7 @@
           :tag="word"
           :active="actives(word, index)"
           :hasAction="true"
-          actionIcon="clear"
+          actionIcon="fas fa-times"
           @actionClicked="$emit('remove', { index, word })"
         />
       </div>

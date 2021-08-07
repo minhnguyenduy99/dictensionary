@@ -10,7 +10,9 @@
         @click="$_toggleOpen"
       >
         <p class="ext-card__title">{{ title }}</p>
-        <span class="ext-card__icon material-icons">{{ _expandIcon }}</span>
+        <span class="ext-card__icon icon">
+          <i :class="open ? openIcon : closeIcon"></i>
+        </span>
       </div>
     </slot>
     <transition
@@ -37,11 +39,11 @@ export default {
     title: String,
     openIcon: {
       type: String,
-      default: "expand_more",
+      default: "fas fa-chevron-down",
     },
     closeIcon: {
       type: String,
-      default: "chevron_left",
+      default: "fas fa-chevron-left",
     },
     rounded: {
       type: Boolean,

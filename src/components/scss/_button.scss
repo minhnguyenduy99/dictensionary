@@ -37,7 +37,7 @@ button.ext-btn {
     font-size: 13px;
 
     span.icon {
-      @extend .md-18;
+      @extend .ext-small;
     }
   }
 }
