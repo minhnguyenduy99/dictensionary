@@ -50,24 +50,6 @@
       </section>
     </div>
     <div class="popup__actions ext-groups">
-      <!-- <div class="ext-tooltip ext-bottom ext-danger">
-        <button
-          class="
-            ext-btn
-            ext-danger
-            ext-small
-            ext-icon
-            ext-small
-            ext-rounded
-            ext-outlined
-            context__close
-          "
-          @click="$emit('delete')"
-        >
-          <span class="icon material-icons">delete</span>
-        </button>
-        <p class="ext-tooltip__text">Delete all contexts</p>
-      </div> -->
       <button
         class="ext-btn ext-icon ext-small ext-danger popup__close-btn"
         @click="isClosed = true"
@@ -82,7 +64,7 @@
 </template>
 
 <script>
-import { positionPopup, highlightSavedWords } from "./utils";
+import { highlightSavedWords } from "./utils";
 import { ThemeMixin } from "./mixins";
 import { MESSAGE_TYPES } from "../message-handlers";
 import WordDefinition from "./word-definition.vue";
@@ -131,6 +113,13 @@ export default {
     },
     loadDefinitionButtonIcon() {
       return this.openDefinition ? "expand_less" : "expand_more";
+    },
+  },
+  watch: {
+    isClosed(val) {
+      if (val) {
+        this.openDefinition = false;
+      }
     },
   },
   methods: {

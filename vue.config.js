@@ -2,15 +2,15 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
-  css: {
-    loaderOptions: {
-      scss: {
-        prependData: `
-          @import "@/components/scss/main.scss";
-        `,
-      },
-    },
-  },
+  // css: {
+  //   loaderOptions: {
+  //     scss: {
+  //       prependData: `
+  //         @import "@/components/scss/main.scss";
+  //       `,
+  //     },
+  //   },
+  // },
   // configureWebpack: {
   //   module: {
   //     rules: [

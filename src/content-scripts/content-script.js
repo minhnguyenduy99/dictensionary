@@ -1,4 +1,5 @@
 import Vue from "vue";
+import "../components/scss/main.scss";
 import { SettingsStorage } from "../storage";
 import {
   injectComponent,

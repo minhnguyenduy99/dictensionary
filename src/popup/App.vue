@@ -303,6 +303,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../components/scss/main.scss";
+
 html {
   body {
     margin: 0;

@@ -66,6 +66,12 @@ export default {
       return count && count > 0;
     },
   },
+  watch: {
+    definition() {
+      this.open = false;
+      this.$nextTick();
+    },
+  },
 };
 </script>
 
