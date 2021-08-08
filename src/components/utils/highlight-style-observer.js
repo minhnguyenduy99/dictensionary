@@ -2,7 +2,7 @@ export default {
   listeners: [],
   style: {
     opacity: 100,
-    backgroundColor: "hsl(105, 85%, 35%)",
+    backgroundColor: "#0f9d58",
     color: "white",
   },
   highlightInfo: {

@@ -10,7 +10,7 @@ export class SettingsStorage extends BaseStorage {
       settings: {
         useDarkTheme: true,
         highlightStyle: {
-          backgroundColor: "#33A50D",
+          backgroundColor: "#0f9d58",
           color: "#ffffff",
           opacity: 80,
         },

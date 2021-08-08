@@ -1,42 +1,9 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-
 module.exports = {
-  // css: {
-  //   loaderOptions: {
-  //     scss: {
-  //       prependData: `
-  //         @import "@/components/scss/main.scss";
-  //       `,
-  //     },
-  //   },
-  // },
-  // configureWebpack: {
-  //   module: {
-  //     rules: [
-  //       {
-  //         test: /\.s[ac]ss$/i,
-  //         use: ["css-loader", "sass-loader"],
-  //       },
-  //     ],
-  //   },
-  // },
   pages: {
     popup: {
       template: "public/browser-extension.html",
       entry: "./src/popup/main.js",
       title: "Popup",
-    },
-    standalone: {
-      template: "public/browser-extension.html",
-      entry: "./src/standalone/main.js",
-      title: "Standalone",
-      filename: "index.html",
-    },
-    devtools: {
-      template: "public/browser-extension.html",
-      entry: "./src/devtools/main.js",
-      title: "Devtools",
     },
   },
   pluginOptions: {

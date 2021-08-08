@@ -1,19 +1,16 @@
 {
   "manifest_version": 2,
   "name": "Dictensionary",
-  "homepage_url": "http://localhost:8080/",
   "description": "Looks up words on dictionary, saves your word with context and highlights it on every page you visit",
   "default_locale": "en",
   "permissions": [
     "activeTab",
-    "<all_urls>",
-    "*://*/*",
     "storage"
   ],
   "icons": {
-    "16": "icons/16.png",
-    "48": "icons/48.png",
-    "128": "icons/128.png"
+    "16": "icons/logo.png",
+    "48": "icons/logo.png",
+    "128": "icons/logo.png"
   },
   "background": {
     "scripts": [
@@ -29,13 +26,12 @@
       "js": ["js/content-script.js"]
     }
   ],
-  "devtools_page": "devtools.html",
   "browser_action": {
     "default_popup": "popup.html",
     "default_title": "Dictensionary",
     "default_icon": {
-      "19": "icons/19.png",
-      "38": "icons/38.png"
+      "19": "icons/logo.png",
+      "38": "icons/logo.png"
     }
   }
 }
