@@ -79,11 +79,6 @@ export default {
       return this.word?.definitions;
     },
   },
-  watch: {
-    word() {
-      this.$_resetPopupState();
-    },
-  },
   methods: {
     $setTheme(useDarkTheme) {
       this.useDarkTheme = useDarkTheme;
