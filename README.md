@@ -11,6 +11,16 @@
 
 The extension also comes up with customizable settings such as dark mode toggling, highlight style adjustment, etc.
 
+## Installation
+
+1. Download the latest version here: [v1.0](https://github.com/minhnguyenduy99/dictensionary/releases/tag/v1.0)
+ 2. Unzip the downloaded file (you can see a folder named **dist**)
+ 3. In Chrome, choose **Extensions** -> Choose **Developer Mode**
+ 4. Click **Load unpacked** and choose folder **dist** 
+ 5. The extension is installed and ready for use.
+
+
+
 ## Features
 
 - [x] Lookup words using [**WordsAPI**](https://rapidapi.com/dpventures/api/wordsapi/)
@@ -20,9 +30,14 @@ The extension also comes up with customizable settings such as dark mode togglin
 - [ ] Highlight adjacent words
 - [ ] Support audio
 
-## Compatibles
+## Compatibilities
 
-**Dictensionary** has been tested with a wide range of websites inlcuding both heavy-interaction pages (facebook, reddit, etc) and heavy-text pages (blogs, documentations, etc) in order to ensure the visual compatibility of extension.
+**Dictensionary** has been tested with a wide range of websites inlcuding both heavy-interaction pages (facebook, reddit, etc) and heavy-content pages (blogs, documentations, etc) in order to ensure the visual compatibility of extension.
+
+## Technologies
+
+- [WordsAPI](https://rapidapi.com/dpventures/api/wordsapi/): A rich, high-performance dictionary API.
+- [Vue Web Extension](https://github.com/Kocal/vue-web-extension): An Vue preset allows you to start developing a web extension
 
 ## Contributors
 
