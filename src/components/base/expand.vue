@@ -10,7 +10,7 @@
         @click="$_toggleOpen"
       >
         <p class="ext-card__title">{{ title }}</p>
-        <span class="ext-card__icon icon">
+        <span class="ext-card__icon icon ext-small">
           <i :class="open ? openIcon : closeIcon"></i>
         </span>
       </div>
@@ -18,7 +18,7 @@
     <transition
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
-      :duration="500"
+      :duration="300"
     >
       <div v-show="_open" class="ext-expand__content">
         <slot class="ext-card__content"></slot>

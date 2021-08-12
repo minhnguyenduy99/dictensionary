@@ -32,12 +32,14 @@
             headerClass="ext-primary"
             style="margin-top: 10px"
           >
-            <list-words
-              :words="filteredWords"
-              emptyText="No words found"
-              :actives="(word, index) => foundWords[word] === 1"
-              @remove="$_removeWord"
-            />
+            <div class="list-words-container">
+              <list-words
+                :words="filteredWords"
+                emptyText="No words found"
+                :actives="(word, index) => foundWords[word] === 1"
+                @remove="$_removeWord"
+              />
+            </div>
           </ext-expand>
         </div>
       </div>
@@ -192,6 +194,7 @@ export default {
     },
   },
   created: function () {
+    console.log("created");
     if (!storage) {
       storage = new SettingsStorage(chrome.storage.sync);
     }
@@ -247,7 +250,11 @@ export default {
       };
       chrome.runtime.sendMessage(message, (response) => {
         const { data: words } = response;
-        this.words = words;
+        this.words = words?.sort((wordA, wordB) => {
+          const foundA = this.foundWords[wordA] ?? 0;
+          const foundB = this.foundWords[wordB] ?? 0;
+          return foundB - foundA;
+        });
       });
     },
     $_removeWord(data) {
@@ -303,6 +310,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import url("https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css");
 @import "../components/scss/main.scss";
 
 html {
@@ -392,5 +400,15 @@ html {
   top: 0;
   max-width: 300px;
   z-index: 99;
+}
+
+.list-words-container {
+  max-height: 200px;
+  overflow: auto;
+  background: var(--ext-background-color);
+
+  > .list-words {
+    height: 100%;
+  }
 }
 </style>

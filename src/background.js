@@ -52,29 +52,31 @@ function onMessageReceived(request, sender, sendResponse) {
   return true;
 }
 
-function onTabUpdated(tabId, changeInfo) {
+function onTabUpdated(tabId, changeInfo, tab) {
+  tab.title && console.log(tab.title);
   const { status } = changeInfo;
   if (status === "complete") {
-    DictionaryRepository.getListSavedWords().then((words) => {
-      const message = {
-        type: MESSAGE_TYPES.GET_LIST_WORDS,
-        data: words,
-      };
-      chrome.tabs.sendMessage(tabId, message, null);
+    storages.settingsStorage.getAppInfo().then((appInfo) => {
+      const { app_key, app_id } = appInfo ?? {};
+      if (!app_key || !app_id) {
+        return;
+      }
+      configApiKey({ appKey: app_key, appId: app_id });
+      // setTimeout(() => {
+      //   storages.settingsStorage.getAppSettings().then((settings) => {
+      //     const message = {
+      //       type: MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE,
+      //       data: settings.highlightStyle,
+      //     };
+      //     chrome.tabs.sendMessage(tabId, message, null);
+      //   });
+      // }, 2000);
     });
-    setTimeout(() => {
-      storages.settingsStorage.getAppSettings().then((settings) => {
-        const message = {
-          type: MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE,
-          data: settings.highlightStyle,
-        };
-        chrome.tabs.sendMessage(tabId, message, null);
-      });
-    }, 2000);
   }
 }
 
 function onInstalled(details) {
+  console.log("Extension is: " + details.reason);
   if (details.reason !== "install") {
     storages.settingsStorage.getAppInfo().then((appInfo) => {
       configApiKey({ appKey: appInfo.app_key, appId: chrome.runtime.id });
@@ -88,14 +90,15 @@ function onInstalled(details) {
         console.error("Cannot assign app");
         return;
       }
+      // config key for reqpository
+      configApiKey({ appKey: data.api_key, appId });
       return storages.settingsStorage
         .saveAppSettings({
+          app_id: appId,
           app_key: data.api_key,
           created_date: data.created_date,
         })
         .then(() => {
-          // config key for reqpository
-          configApiKey({ appKey: data.api_key, appId });
           console.log("Dictensionary is installed");
         });
     });

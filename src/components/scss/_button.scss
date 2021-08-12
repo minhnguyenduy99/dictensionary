@@ -35,10 +35,6 @@ button.ext-btn {
   &.ext-small {
     padding: 5px 10px;
     font-size: 13px;
-
-    span.icon {
-      @extend .ext-small;
-    }
   }
 }
 

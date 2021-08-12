@@ -37,7 +37,7 @@
         @click="isClosed = true"
         @mouseup.stop
       >
-        <span class="icon">
+        <span class="icon ext-small">
           <i class="fas fa-times"></i>
         </span>
       </button>
@@ -49,7 +49,7 @@
 import { MESSAGE_TYPES } from "../message-handlers";
 import WordDefinition from "./word-definition.vue";
 import { ThemeMixin } from "./mixins";
-import { positionPopup, highlightSavedWords } from "./utils";
+import { highlightSavedWords } from "./utils";
 
 export default {
   name: "DictionaryPopup",
@@ -77,6 +77,11 @@ export default {
   computed: {
     definitions() {
       return this.word?.definitions;
+    },
+  },
+  watch: {
+    word() {
+      this.$_resetPopupState();
     },
   },
   methods: {

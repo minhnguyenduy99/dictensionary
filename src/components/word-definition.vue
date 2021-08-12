@@ -86,6 +86,10 @@ export default {
   watch: {
     definition(val) {
       this.contextOpen = false;
+      this.currentContext = {
+        textual_context: null,
+        visual_context: null,
+      };
     },
   },
   methods: {
@@ -123,8 +127,11 @@ export default {
       border-bottom: 5px solid var(--ext-primary);
     }
     ul {
+      list-style-type: disc;
+      list-style-image: none;
       list-style-position: outside;
-      margin-left: 10px;
+      margin-left: 20px;
+      padding: 0;
 
       > li {
         font-style: italic;

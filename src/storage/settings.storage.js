@@ -4,6 +4,7 @@ export class SettingsStorage extends BaseStorage {
   async init() {
     const settings = {
       app_info: {
+        app_id: null,
         app_key: null,
         app_created_date: null,
       },
@@ -28,10 +29,11 @@ export class SettingsStorage extends BaseStorage {
   }
 
   async saveAppSettings(settings) {
-    const { app_key, created_date } = settings;
+    const { app_id, app_key, created_date } = settings;
     try {
       await this.set({
         app_info: {
+          app_id,
           app_key,
           created_date,
         },

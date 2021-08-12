@@ -8,7 +8,7 @@
         "
         @click="$emit('delete')"
       >
-        <span class="icon">
+        <span class="icon ext-small">
           <i class="fas fa-trash"></i>
         </span>
       </button>

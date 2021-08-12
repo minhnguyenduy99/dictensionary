@@ -24,7 +24,7 @@ export function autoHighlightWords(
   getListWordsHandler,
   highlightStyle = highlightStyleObserver.style
 ) {
-  let lastBodyHeight = window.innerHeight;
+  let lastBodyHeight = 0;
   let lastUpdatedTime = 0;
   let defaultTimeSpan = 5000; // 10 seconds
 

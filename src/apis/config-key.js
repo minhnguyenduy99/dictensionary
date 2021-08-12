@@ -1,4 +1,4 @@
-let _apiConfig;
+let _apiConfig = {};
 
 /**
  *

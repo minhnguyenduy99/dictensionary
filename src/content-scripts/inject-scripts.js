@@ -5,6 +5,9 @@
   injectStyle(
     "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap"
   );
+  injectStyle(
+    "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css"
+  );
 })();
 
 function injectStyle(href) {

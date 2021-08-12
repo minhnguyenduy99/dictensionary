@@ -55,7 +55,7 @@
         @click="isClosed = true"
         @mouseup.stop
       >
-        <span class="icon">
+        <span class="icon ext-small">
           <i class="fas fa-times"></i>
         </span>
       </button>
