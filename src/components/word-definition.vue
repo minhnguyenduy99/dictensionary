@@ -86,7 +86,10 @@ export default {
   watch: {
     definition(val) {
       this.contextOpen = false;
-      this.currentContext = {
+      if (!val) {
+        return;
+      }
+      this.currentContext = this.context ?? {
         textual_context: null,
         visual_context: null,
       };
@@ -94,7 +97,7 @@ export default {
   },
   methods: {
     $on_updateContext() {
-      console.log("update context");
+      console.log(this.currentContext);
       this.$emit("update:context", this.currentContext);
       this.$emit("contextChanged", this.currentContext);
     },

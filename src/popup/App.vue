@@ -194,7 +194,6 @@ export default {
     },
   },
   created: function () {
-    console.log("created");
     if (!storage) {
       storage = new SettingsStorage(chrome.storage.sync);
     }

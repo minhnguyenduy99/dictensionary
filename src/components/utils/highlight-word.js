@@ -86,10 +86,8 @@ export async function highlightSavedWords(
     );
   } catch (err) {
     // catch error to stop the promise
-    console.log("stop");
   }
 
-  console.log(foundWords);
   highlightStyle && highlightStyleObserver.updateStyle(highlightStyle);
   highlightStyleObserver.updateHighlightInfo({ foundWords });
 }
@@ -185,7 +183,7 @@ function splitTextElement(textElement, searchWords, foundWords) {
   function splitTextToWords(textContent, word) {
     let newElements = [];
     let tempTextContent = textContent;
-    const regex = new RegExp(word + "\\b", "gi");
+    const regex = new RegExp("\\b" + word + "\\b", "gi");
     let wordIndex = tempTextContent.search(regex);
     let found = false;
     while (wordIndex !== -1) {

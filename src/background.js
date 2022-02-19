@@ -53,30 +53,26 @@ function onMessageReceived(request, sender, sendResponse) {
 }
 
 function onTabUpdated(tabId, changeInfo, tab) {
-  tab.title && console.log(tab.title);
   const { status } = changeInfo;
-  if (status === "complete") {
-    storages.settingsStorage.getAppInfo().then((appInfo) => {
-      const { app_key, app_id } = appInfo ?? {};
-      if (!app_key || !app_id) {
-        return;
-      }
-      configApiKey({ appKey: app_key, appId: app_id });
-      // setTimeout(() => {
-      //   storages.settingsStorage.getAppSettings().then((settings) => {
-      //     const message = {
-      //       type: MESSAGE_TYPES.UPDATE_HIGHLIGHT_STYLE,
-      //       data: settings.highlightStyle,
-      //     };
-      //     chrome.tabs.sendMessage(tabId, message, null);
-      //   });
-      // }, 2000);
-    });
+  console.log(tab);
+  // Only update on active tab when the extension is loaded
+  if (status === "complete" && tab.url) {
+    // test timeout
+    setTimeout(() => {
+      console.log("on tab updated");
+      storages.settingsStorage.getAppInfo().then((appInfo) => {
+        const { app_key, app_id } = appInfo ?? {};
+        if (!app_key || !app_id) {
+          console.log("[DEBUG] Cannot find app info");
+          return;
+        }
+        configApiKey({ appKey: app_key, appId: app_id });
+      });
+    }, 1000);
   }
 }
 
 function onInstalled(details) {
-  console.log("Extension is: " + details.reason);
   if (details.reason !== "install") {
     storages.settingsStorage.getAppInfo().then((appInfo) => {
       configApiKey({ appKey: appInfo.app_key, appId: chrome.runtime.id });

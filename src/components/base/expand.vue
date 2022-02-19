@@ -69,7 +69,6 @@ export default {
   },
   methods: {
     $_toggleOpen() {
-      console.log("toggle open");
       this._open = !this.open;
     },
   },

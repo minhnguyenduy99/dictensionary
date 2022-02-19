@@ -82,4 +82,4 @@ function onTabMessagedReceived(request, sender, sendResponse) {
   }
 }
 
-console.log("Hello from the content-script");
+console.log("Dictensionary is executed on this page");

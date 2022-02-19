@@ -102,7 +102,7 @@ export default {
         const { contexts, ...word } = data;
         this.word = word;
         this.contexts =
-          contexts?.items ?? new Array(word.definitions.length).fill(false);
+          contexts?.items ?? new Array(word.definitions.length).fill(null);
         this.isClosed = false;
       });
     },
@@ -116,7 +116,6 @@ export default {
         },
       };
       chrome.runtime.sendMessage(message, (response) => {
-        console.log(response);
         const { data } = response;
         if (!data.success) {
           return;
